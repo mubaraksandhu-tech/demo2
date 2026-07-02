@@ -39,6 +39,17 @@
       text-decoration: none; font-weight: 600; border-radius: 8px;
     }
     .nav-login:hover { background: #E6F1FB; }
+    .nav-user { display: flex; align-items: center; gap: 10px; }
+    .nav-username {
+      font-size: 13px; font-weight: 600; color: #14171a;
+      max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .nav-logout {
+      font-size: 13px; padding: 6px 14px; border-radius: 8px;
+      border: 1px solid #185FA5; color: #185FA5; background: transparent;
+      cursor: pointer; font-weight: 600; font-family: inherit;
+    }
+    .nav-logout:hover { background: #185FA5; color: #fff; }
 
     html { scroll-behavior: smooth; }
     .section[id], .cta-strip[id] { scroll-margin-top: 72px; }
@@ -172,8 +183,12 @@
       <a href="#about">About</a>
     </div>
     <div class="nav-actions">
-      <a href="#" class="nav-login" onclick="openAuthModal('signin'); return false;">Log in</a>
-      <a href="#" class="nav-cta" onclick="openAuthModal('signup'); return false;">Apply now</a>
+      <a href="#" class="nav-login" id="navLoginBtn" onclick="openAuthModal('signin'); return false;">Log in</a>
+      <a href="#" class="nav-cta" id="navApplyBtn" onclick="openAuthModal('signup'); return false;">Apply now</a>
+      <div class="nav-user auth-hidden" id="navUser">
+        <span class="nav-username" id="navUsername"></span>
+        <button class="nav-logout" id="navLogoutBtn">Logout</button>
+      </div>
     </div>
   </nav>
 
@@ -496,12 +511,6 @@
           <button type="button" class="auth-btn-link" id="toggleBtn">Create one</button>
         </p>
       </div>
-
-      <div id="signedInView" class="auth-signed-in auth-hidden">
-        <div class="avatar" id="avatarInitial">•</div>
-        <div class="email-display" id="userEmail"></div>
-        <button class="auth-btn-primary" id="signOutBtn">Sign out</button>
-      </div>
     </div>
   </div>
 
@@ -541,7 +550,6 @@
     let mode = "signin";
 
     const authView = document.getElementById("authView");
-    const signedInView = document.getElementById("signedInView");
     const authForm = document.getElementById("authForm");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
@@ -551,10 +559,12 @@
     const toggleBtn = document.getElementById("toggleBtn");
     const toggleText = document.getElementById("toggleText");
     const forgotBtn = document.getElementById("forgotBtn");
-    const signOutBtn = document.getElementById("signOutBtn");
     const messageEl = document.getElementById("message");
-    const userEmailEl = document.getElementById("userEmail");
-    const avatarInitial = document.getElementById("avatarInitial");
+    const navLoginBtn = document.getElementById("navLoginBtn");
+    const navApplyBtn = document.getElementById("navApplyBtn");
+    const navUser = document.getElementById("navUser");
+    const navUsername = document.getElementById("navUsername");
+    const navLogoutBtn = document.getElementById("navLogoutBtn");
 
     function showMessage(text, type) {
       messageEl.textContent = text;
@@ -625,7 +635,7 @@
       }
     });
 
-    signOutBtn.addEventListener("click", async () => {
+    navLogoutBtn.addEventListener("click", async () => {
       await signOut(auth);
     });
 
@@ -647,15 +657,18 @@
       onAuthStateChanged(auth, (user) => {
         clearMessage();
         if (user) {
-          authView.classList.add("auth-hidden");
-          signedInView.classList.remove("auth-hidden");
-          
-          userEmailEl.textContent = user.email;
-          avatarInitial.textContent = (user.email || "?").charAt(0).toUpperCase();
-          }else {
-            authView.classList.remove("auth-hidden");
-            signedInView.classList.add("auth-hidden");
-            authForm.reset();
+          // Logged in: close the popup and swap the nav buttons for the username + logout
+          window.closeAuthModal();
+          authForm.reset();
+          navLoginBtn.classList.add("auth-hidden");
+          navApplyBtn.classList.add("auth-hidden");
+          navUser.classList.remove("auth-hidden");
+          navUsername.textContent = user.email;
+        } else {
+          navLoginBtn.classList.remove("auth-hidden");
+          navApplyBtn.classList.remove("auth-hidden");
+          navUser.classList.add("auth-hidden");
+          navUsername.textContent = "";
         }
       });
     }
