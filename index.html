@@ -649,12 +649,13 @@
         if (user) {
           authView.classList.add("auth-hidden");
           signedInView.classList.remove("auth-hidden");
+          
           userEmailEl.textContent = user.email;
           avatarInitial.textContent = (user.email || "?").charAt(0).toUpperCase();
-        } else {
-          authView.classList.remove("auth-hidden");
-          signedInView.classList.add("auth-hidden");
-          authForm.reset();
+          }else {
+            authView.classList.remove("auth-hidden");
+            signedInView.classList.add("auth-hidden");
+            authForm.reset();
         }
       });
     }
