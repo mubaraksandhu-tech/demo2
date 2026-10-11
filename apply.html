@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Apply | Aldermoor University</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
 <style>
   :root {
     --navy-900:#071E38; --navy-800:#0A2A4D; --navy-700:#0C447C; --blue-600:#185FA5;
@@ -80,6 +81,15 @@
   .ref { display:inline-block; margin:1rem 0; padding:.5rem 1rem; background:var(--blue-100); color:var(--navy-800); border-radius:8px; font-weight:700; letter-spacing:.06em; }
   @media (max-width:560px) { .progress li span { display:none; } .progress li.current span { display:inline; } .review dl { grid-template-columns:1fr; } .nav-row { flex-wrap:wrap; } }
 
+  .divider { display:flex; align-items:center; gap:12px; margin:1.25rem 0 .9rem; font-size:13px; color:var(--muted); }
+  .divider::before, .divider::after { content:""; flex:1; height:1px; background:var(--line); }
+  .social { display:grid; gap:10px; }
+  .social-btn { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:.75rem; background:#fff; color:var(--ink); border:1px solid var(--line); border-radius:999px; font:600 15px var(--font-body); cursor:pointer; transition:background .2s,border-color .2s; }
+  .social-btn:hover { background:var(--blue-50); border-color:#378ADD; }
+  .social-btn.apple { background:#000; color:#fff; border-color:#000; }
+  .social-btn.apple:hover { background:#222; }
+  .social-btn i { font-size:20px; }
+  #phonePanel .btn { width:100%; margin-top:12px; }
   footer { background:var(--navy-900); color:#C9D8EA; text-align:center; font-size:14px; padding:1.25rem; }
   @media (max-width:560px) { .card { padding:1.4rem; } .hero { padding-bottom:3.5rem; } }
 </style>
@@ -111,7 +121,33 @@
       <div class="row"><button type="button" class="link" id="forgotBtn">Forgot password?</button></div>
       <button type="submit" class="btn" id="submitBtn">Sign in</button>
     </form>
-    <p class="toggle"><span id="toggleText">Don't have an account?</span> <button type="button" class="link" id="toggleBtn">Create one</button></p>
+
+        <div id="socialBox" class="">
+          <div class="divider"><span>or continue with</span></div>
+          <div class="social">
+            <button type="button" class="social-btn" id="googleBtn"><i class="ti ti-brand-google" aria-hidden="true"></i>Continue with Google</button>
+            <button type="button" class="social-btn" id="phoneBtn"><i class="ti ti-phone" aria-hidden="true"></i>Continue with phone</button>
+            <button type="button" class="social-btn apple" id="appleBtn"><i class="ti ti-brand-apple" aria-hidden="true"></i>Continue with Apple</button>
+          </div>
+        </div>
+        <div id="phonePanel" class="hidden">
+          <div>
+            <label for="phoneInput">Phone number</label>
+            <input type="tel" id="phoneInput" placeholder="+91 98765 43210" autocomplete="tel" inputmode="tel" />
+            <p class="fmsg">Include your country code, e.g. +91 or +44.</p>
+          </div>
+          <button type="button" class="btn" id="sendCodeBtn">Send code</button>
+          <div id="codeRow" class="hidden">
+            <div class="" style="margin-top:14px">
+              <label for="codeInput">6-digit code</label>
+              <input type="text" id="codeInput" inputmode="numeric" autocomplete="one-time-code" maxlength="6" />
+            </div>
+            <button type="button" class="btn" id="verifyBtn">Verify and sign in</button>
+          </div>
+          <div id="recaptchaContainer"></div>
+          <p class="toggle"><button type="button" class="link" id="phoneBackBtn">Back to other sign-in options</button></p>
+        </div>
+    <p class="toggle" id="toggleRow"><span id="toggleText">Don't have an account?</span> <button type="button" class="link" id="toggleBtn">Create one</button></p>
   </section>
 
   <!-- Signed in -->
@@ -146,7 +182,8 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
     getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-    signOut, sendPasswordResetEmail, onAuthStateChanged
+    signOut, sendPasswordResetEmail, onAuthStateChanged,
+    GoogleAuthProvider, OAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -222,7 +259,19 @@
       "auth/invalid-credential": "Incorrect email or password.",
       "auth/email-already-in-use": "An account with that email already exists.",
       "auth/weak-password": "Password should be at least 6 characters.",
-      "auth/too-many-requests": "Too many attempts. Try again in a moment."
+      "auth/too-many-requests": "Too many attempts. Try again in a moment.",
+      "auth/operation-not-allowed": "This sign-in method isn't switched on yet. Enable it in Firebase Console > Authentication > Sign-in method.",
+      "auth/unauthorized-domain": "This website's domain isn't authorised in Firebase (Authentication > Settings > Authorized domains).",
+      "auth/popup-blocked": "Your browser blocked the sign-in popup. Allow popups for this site and try again.",
+      "auth/account-exists-with-different-credential": "An account with this email already exists using a different sign-in method. Use that method first.",
+      "auth/invalid-phone-number": "That phone number isn't valid. Include the country code, e.g. +91.",
+      "auth/missing-phone-number": "Enter your phone number first.",
+      "auth/invalid-verification-code": "That code is incorrect. Check it and try again.",
+      "auth/code-expired": "That code has expired. Request a new one.",
+      "auth/captcha-check-failed": "The security check failed. Refresh the page and try again.",
+      "auth/quota-exceeded": "The SMS limit has been reached. Try again later.",
+      "auth/billing-not-enabled": "Phone sign-in needs billing enabled on the Firebase project.",
+      "auth/network-request-failed": "Network problem. Check your connection and try again."
     };
     return map[err.code] || "Something went wrong. Please try again.";
   }
@@ -295,7 +344,7 @@
     return '<div class="field">' + lab + ctl + msg + "</div>";
   }
   function reviewHtml() {
-    let h = '<h3 class="step-title" id="stepTitle" tabindex="-1">Review your answers</h3><p class="step-note">Check everything below. You can go back and edit any section before submitting.</p><div class="review"><dl><dt>Account email</dt><dd>' + esc(auth.currentUser.email) + "</dd></dl>";
+    let h = '<h3 class="step-title" id="stepTitle" tabindex="-1">Review your answers</h3><p class="step-note">Check everything below. You can go back and edit any section before submitting.</p><div class="review"><dl><dt>Account</dt><dd>' + esc(auth.currentUser.email || auth.currentUser.phoneNumber || "") + "</dd></dl>";
     STEPS.forEach((st, i) => {
       h += '<h4><span>' + esc(st.title) + '</span><button type="button" class="link" data-goto="' + i + '">Edit</button></h4><dl>';
       st.fields.forEach((f) => { const v = answers[f.id]; h += "<dt>" + esc(f.type === "checkbox" ? "Confirmed" : f.label) + "</dt><dd>" + esc(f.type === "checkbox" ? (v === true ? "Yes" : "No") : (v || "\u2014")) + "</dd>"; });
@@ -353,7 +402,7 @@
     saving = true; render(); setStatus("Saving\u2026", "success");
     try {
       const ref = doc(db, "applications", user.uid);
-      const data = { applicantUid: user.uid, email: user.email, status, answers: { ...answers }, createdAt: createdAt || serverTimestamp(), updatedAt: serverTimestamp() };
+      const data = { applicantUid: user.uid, email: user.email || "", status, answers: { ...answers }, createdAt: createdAt || serverTimestamp(), updatedAt: serverTimestamp() };
       if (status === "submitted") data.submittedAt = serverTimestamp();
       await setDoc(ref, data);                          // resolves only when the server accepts the write
       if (!createdAt) createdAt = (await getDoc(ref)).data().createdAt;
@@ -391,19 +440,80 @@
     render();
   }
 
+
+  // ---------- Google / Apple / Phone sign-in ----------
+  const SHOW_APPLE = true;   // set to false to hide the Apple button until Apple sign-in is set up
+  const HIDE = document.getElementById("authOverlay") ? "auth-hidden" : "hidden";
+  const $s = (id) => document.getElementById(id);
+  let recaptcha = null, confirmation = null;
+  if (!SHOW_APPLE) $s("appleBtn").classList.add(HIDE);
+
+  async function socialSignIn(provider) {
+    if (!auth) { showMessage("Firebase is not configured.", "error"); return; }
+    clearMessage();
+    try { await signInWithPopup(auth, provider); }
+    catch (err) {
+      if (err.code !== "auth/popup-closed-by-user" && err.code !== "auth/cancelled-popup-request") showMessage(friendlyError(err), "error");
+    }
+  }
+  $s("googleBtn").addEventListener("click", () => {
+    const p = new GoogleAuthProvider(); p.setCustomParameters({ prompt: "select_account" }); socialSignIn(p);
+  });
+  $s("appleBtn").addEventListener("click", () => {
+    const p = new OAuthProvider("apple.com"); p.addScope("email"); p.addScope("name"); socialSignIn(p);
+  });
+
+  function resetRecaptcha() {
+    try { if (recaptcha) recaptcha.clear(); } catch (e) {}
+    recaptcha = null; $s("recaptchaContainer").innerHTML = "";
+  }
+  function showPhone(on) {
+    $s("phonePanel").classList.toggle(HIDE, !on);
+    ["authForm", "socialBox", "toggleRow"].forEach((id) => $s(id).classList.toggle(HIDE, on));
+    if (!on) { $s("codeRow").classList.add(HIDE); $s("phoneInput").value = ""; $s("codeInput").value = ""; confirmation = null; resetRecaptcha(); }
+    clearMessage();
+    if (on) $s("phoneInput").focus();
+  }
+  $s("phoneBtn").addEventListener("click", () => { if (!auth) { showMessage("Firebase is not configured.", "error"); return; } showPhone(true); });
+  $s("phoneBackBtn").addEventListener("click", () => showPhone(false));
+
+  $s("sendCodeBtn").addEventListener("click", async () => {
+    clearMessage();
+    const phone = $s("phoneInput").value.replace(/[\s()-]/g, "");
+    if (!/^\+[1-9]\d{7,14}$/.test(phone)) { showMessage("Enter your number with the country code, for example +919876543210.", "error"); return; }
+    const btn = $s("sendCodeBtn"); btn.disabled = true;
+    try {
+      if (!recaptcha) recaptcha = new RecaptchaVerifier(auth, "recaptchaContainer", { size: "invisible" });
+      confirmation = await signInWithPhoneNumber(auth, phone, recaptcha);
+      $s("codeRow").classList.remove(HIDE);
+      showMessage("We sent a 6-digit code to " + phone + ". Enter it below.", "success");
+      $s("codeInput").focus();
+    } catch (err) { showMessage(friendlyError(err), "error"); resetRecaptcha(); }
+    finally { btn.disabled = false; }
+  });
+  $s("verifyBtn").addEventListener("click", async () => {
+    clearMessage();
+    const code = $s("codeInput").value.trim();
+    if (!confirmation || !/^\d{6}$/.test(code)) { showMessage("Enter the 6-digit code we sent you.", "error"); return; }
+    const btn = $s("verifyBtn"); btn.disabled = true;
+    try { await confirmation.confirm(code); }
+    catch (err) { showMessage(friendlyError(err), "error"); }
+    finally { btn.disabled = false; }
+  });
+
   // Show the form ONLY while a user is signed in.
   onAuthStateChanged(auth, (user) => {
     $("loading").classList.add("hidden");
     if (user) {
       $("signedOut").classList.add("hidden");
       $("signedIn").classList.remove("hidden");
-      $("userEmail").textContent = user.email;
-      $("newTabLink").href = buildUrl(user.email, false);
+      $("userEmail").textContent = user.email || user.phoneNumber || user.displayName || "your account";
+      $("newTabLink").href = buildUrl(user.email || "", false);
       loadApplication(user);
     } else {
       $("signedIn").classList.add("hidden");
       $("signedOut").classList.remove("hidden");
-      $("authForm").reset(); clearMessage(); resetApp();
+      $("authForm").reset(); clearMessage(); resetApp(); showPhone(false);
     }
   });
   setMode("signin");
