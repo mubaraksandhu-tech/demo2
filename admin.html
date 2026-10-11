@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex" />
+<title>Admissions staff | Aldermoor University</title>
+<style>
+  :root {
+    --navy-900:#071E38; --navy-800:#0A2A4D; --navy-700:#0C447C; --blue-600:#185FA5;
+    --blue-100:#E6F1FB; --blue-50:#F2F7FC; --ink:#12233A; --muted:#4A5B72; --line:#DCE4EE;
+    --error:#A13D2A; --ok:#1E6B45; --ok-bg:#E4F4EB; --warn-bg:#FFF4D6; --warn:#7A5A00; --bad-bg:#F8ECE8;
+    --font-display:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+    --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--font-body); color:var(--ink); background:var(--blue-50); min-height:100vh; display:flex; flex-direction:column; line-height:1.55; }
+  :focus-visible { outline:3px solid #378ADD; outline-offset:3px; border-radius:4px; }
+  .hidden { display:none !important; }
+  header { background:linear-gradient(120deg,var(--navy-900),var(--navy-700)); color:#fff; }
+  .bar { max-width:1200px; margin:0 auto; padding:1rem 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+  .brand { color:#fff; text-decoration:none; font-family:var(--font-display); font-size:1.25rem; font-weight:700; }
+  .back { color:#DCEAF8; font-size:14px; text-decoration:none; } .back:hover { color:#fff; text-decoration:underline; }
+  .hero { max-width:1200px; margin:0 auto; padding:1rem 1.5rem 3.5rem; }
+  .hero h1 { font-family:var(--font-display); font-size:clamp(1.7rem,3.6vw,2.4rem); line-height:1.15; }
+  .hero p { color:#DCEAF8; font-size:15px; }
+  main { flex:1; width:100%; max-width:1200px; margin:-2rem auto 3rem; padding:0 1.5rem; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 10px 30px rgba(10,42,77,.12); padding:1.5rem; margin-bottom:18px; }
+  .card.narrow { max-width:420px; margin-left:auto; margin-right:auto; }
+  h2 { font-family:var(--font-display); font-size:1.4rem; color:var(--navy-800); margin-bottom:.4rem; }
+  .sub { color:var(--muted); font-size:15px; }
+  .top { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+  label { display:block; font-size:14px; font-weight:600; color:var(--navy-800); margin-bottom:6px; }
+  input, select { width:100%; border:1px solid var(--line); border-radius:8px; padding:11px 12px; font:15px var(--font-body); background:var(--blue-50); color:var(--ink); }
+  input:focus, select:focus { border-color:var(--blue-600); box-shadow:0 0 0 3px var(--blue-100); outline:none; }
+  form > div { margin-bottom:14px; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; border:1.5px solid var(--navy-800); border-radius:999px; background:var(--navy-800); color:#fff; padding:.65rem 1.3rem; font:600 15px/1.2 var(--font-body); cursor:pointer; text-decoration:none; transition:background .2s,color .2s; }
+  .btn:hover { background:var(--blue-600); border-color:var(--blue-600); }
+  .btn:disabled { opacity:.6; cursor:not-allowed; }
+  .btn.ghost { background:transparent; color:var(--navy-800); } .btn.ghost:hover { background:var(--navy-800); color:#fff; }
+  .btn.small { padding:.4rem .9rem; font-size:14px; }
+  .msg { display:none; padding:.75rem 1rem; border-radius:10px; font-size:14.5px; margin-bottom:14px; }
+  .msg.error { display:block; background:var(--bad-bg); color:var(--error); } .msg.success { display:block; background:var(--ok-bg); color:var(--ok); }
+  code.uid { display:block; margin:.75rem 0; padding:.7rem; background:var(--blue-50); border:1px solid var(--line); border-radius:8px; word-break:break-all; user-select:all; }
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; margin:1rem 0; }
+  .stat { background:var(--blue-50); border:1px solid var(--line); border-radius:12px; padding:.8rem 1rem; }
+  .stat b { display:block; font-family:var(--font-display); font-size:1.7rem; color:var(--navy-800); line-height:1.1; } .stat span { font-size:13px; color:var(--muted); }
+  .filters { display:grid; grid-template-columns:220px 1fr; gap:12px; margin-bottom:1rem; }
+  .tablewrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:14.5px; min-width:720px; }
+  th, td { text-align:left; padding:.7rem .6rem; border-bottom:1px solid var(--line); vertical-align:middle; }
+  th { font-size:13px; color:var(--muted); font-weight:600; }
+  .badge { display:inline-block; padding:.2rem .7rem; border-radius:999px; font-size:13px; font-weight:700; background:var(--blue-100); color:var(--navy-700); white-space:nowrap; }
+  .badge.accepted { background:var(--ok-bg); color:var(--ok); } .badge.rejected { background:var(--bad-bg); color:var(--error); } .badge.draft { background:var(--warn-bg); color:var(--warn); }
+  .group h3 { font-size:15px; color:var(--navy-800); margin:1.1rem 0 .5rem; padding-bottom:.3rem; border-bottom:1px solid var(--line); }
+  .group dl { display:grid; grid-template-columns:minmax(140px,1fr) 2fr; gap:6px 16px; font-size:15px; }
+  .group dt { color:var(--muted); } .group dd { word-break:break-word; white-space:pre-wrap; }
+  .statusbox { display:flex; gap:12px; align-items:end; flex-wrap:wrap; margin:1rem 0; } .statusbox > div { min-width:220px; }
+  footer { background:var(--navy-900); color:#C9D8EA; text-align:center; font-size:14px; padding:1.25rem; }
+  @media (max-width:640px) { .filters { grid-template-columns:1fr; } .group dl { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar"><a class="brand" href="index.html">Aldermoor University</a><a class="back" href="index.html">&larr; Back to website</a></div>
+  <div class="hero"><h1>Admissions staff</h1><p>Review applications and update their status.</p></div>
+</header>
+
+<main id="main">
+  <div id="vLoading" class="card narrow"><p class="sub">Checking your access&hellip;</p></div>
+
+  <section id="vSignedOut" class="card narrow hidden" aria-labelledby="soT">
+    <h2 id="soT">Staff sign in</h2>
+    <p class="sub" style="margin-bottom:1rem">Sign in with your staff account.</p>
+    <div id="signMsg" class="msg" role="alert"></div>
+    <form id="signForm">
+      <div><label for="email">Email</label><input type="email" id="email" required autocomplete="email" /></div>
+      <div><label for="password">Password</label><input type="password" id="password" required autocomplete="current-password" /></div>
+      <button type="submit" class="btn" id="signBtn" style="width:100%">Sign in</button>
+    </form>
+  </section>
+
+  <section id="vDenied" class="card narrow hidden" aria-labelledby="dnT">
+    <h2 id="dnT">Access denied</h2>
+    <p class="sub" id="deniedText">This account is not on the admissions staff list.</p>
+    <p class="sub" style="margin-top:.75rem">Your account ID (give this to the site owner so they can add you):</p>
+    <code class="uid" id="uidBox"></code>
+    <button type="button" class="btn ghost" id="deniedOut">Sign out</button>
+  </section>
+
+  <section id="vStaff" class="hidden">
+    <div id="listView">
+      <div class="card">
+        <div class="top"><div><h2>Applications</h2><p class="sub">Signed in as <strong id="who"></strong></p></div><button type="button" class="btn ghost" id="staffOut">Sign out</button></div>
+        <div class="stats" id="stats"></div>
+        <div id="listMsg" class="msg" role="alert"></div>
+        <div class="filters">
+          <div><label for="fStatus">Status</label>
+            <select id="fStatus"><option value="all">All</option><option value="submitted">Submitted</option><option value="under_review">Under review</option><option value="accepted">Accepted</option><option value="rejected">Rejected</option><option value="draft">Draft</option></select></div>
+          <div><label for="fSearch">Search</label><input type="search" id="fSearch" placeholder="Name, email, programme or reference" /></div>
+        </div>
+        <div class="tablewrap"><table><thead><tr><th>Reference</th><th>Applicant</th><th>Programme</th><th>Date</th><th>Status</th><th><span class="hidden">Action</span></th></tr></thead><tbody id="rows"></tbody></table></div>
+        <p class="sub" id="emptyNote" style="margin-top:1rem"></p>
+      </div>
+    </div>
+    <div id="detailView" class="hidden"></div>
+  </section>
+</main>
+<footer>&copy; 2026 Aldermoor University. Staff area.</footer>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, doc, getDoc, getDocs, collection, query, orderBy, limit, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  // Same Firebase project as the rest of the site (copied unchanged).
+  const firebaseConfig = {
+    apiKey: "AIzaSyBjnLNN8BLm9sEJluPnlDhHwS3G9fGTFoA",
+    authDomain: "fir-def09.firebaseapp.com",
+    projectId: "fir-def09",
+    storageBucket: "fir-def09.firebasestorage.app",
+    messagingSenderId: "995080563939",
+    appId: "1:995080563939:web:dec983e691c0d065aee9d6",
+    measurementId: "G-SSE2P4WNEH"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const $ = (id) => document.getElementById(id);
+  const esc = (t) => String(t ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const LABEL = { draft: "Draft", submitted: "Submitted", under_review: "Under review", accepted: "Accepted", rejected: "Rejected" };
+  const GROUPS = [
+    ["Personal details", [["fullName","Full name"],["dob","Date of birth"],["phone","Phone number"],["country","Country of residence"]]],
+    ["Programme", [["level","Level of study"],["field","Field of study"],["programme","Programme"]]],
+    ["Education", [["qualification","Highest qualification"],["institution","School or university"],["gradYear","Year of completion"],["grade","Grade or result"]]],
+    ["Statement", [["statement","Personal statement"],["declaration","Declaration accepted"],["consent","Consent given"]]]
+  ];
+  const fmt = (ts) => ts && ts.toDate ? ts.toDate().toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "\u2014";
+  const val = (v) => v === true ? "Yes" : v === false ? "No" : (v || "\u2014");
+  let apps = [];
+  const VIEWS = ["vLoading", "vSignedOut", "vDenied", "vStaff"];
+  const show = (id) => VIEWS.forEach((v) => $(v).classList.toggle("hidden", v !== id));
+  function msg(el, text, type) { el.textContent = text; el.className = "msg" + (text ? " " + type : ""); }
+
+  // ---- sign in (email + password) ----
+  $("signForm").addEventListener("submit", async (e) => {
+    e.preventDefault(); msg($("signMsg"), "", ""); $("signBtn").disabled = true;
+    try { await signInWithEmailAndPassword(auth, $("email").value.trim(), $("password").value); }
+    catch (err) {
+      const m = { "auth/invalid-credential": "Incorrect email or password.", "auth/invalid-email": "That email address doesn't look right.", "auth/too-many-requests": "Too many attempts. Try again in a moment." };
+      msg($("signMsg"), m[err.code] || "Could not sign in. Please try again.", "error");
+    } finally { $("signBtn").disabled = false; }
+  });
+  $("staffOut").addEventListener("click", () => signOut(auth));
+  $("deniedOut").addEventListener("click", () => signOut(auth));
+
+  // ---- list ----
+  async function loadApps() {
+    msg($("listMsg"), "", "");
+    try {
+      const snap = await getDocs(query(collection(db, "applications"), orderBy("updatedAt", "desc"), limit(300)));
+      apps = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    } catch (err) { console.error(err); apps = []; msg($("listMsg"), "Could not load applications (" + (err.code || "error") + ").", "error"); }
+    renderList();
+  }
+  function renderList() {
+    const counts = { all: apps.length }; Object.keys(LABEL).forEach((k) => counts[k] = apps.filter((a) => a.status === k).length);
+    $("stats").innerHTML = [["all", "Total"], ["submitted", "Submitted"], ["under_review", "Under review"], ["accepted", "Accepted"], ["rejected", "Rejected"], ["draft", "Drafts"]]
+      .map(([k, l]) => '<div class="stat"><b>' + counts[k] + "</b><span>" + l + "</span></div>").join("");
+    const f = $("fStatus").value, q = $("fSearch").value.trim().toLowerCase();
+    const list = apps.filter((a) => (f === "all" || a.status === f) &&
+      (!q || [a.answers && a.answers.fullName, a.email, a.answers && a.answers.programme, a.answers && a.answers.field, a.id.slice(0, 8)].join(" ").toLowerCase().includes(q)));
+    $("rows").innerHTML = list.map((a) => { const an = a.answers || {};
+      return "<tr><td>" + esc(a.id.slice(0, 8).toUpperCase()) + "</td><td><strong>" + esc(an.fullName || "\u2014") + "</strong><br><span class=\"sub\">" + esc(a.email || an.phone || "") + "</span></td><td>" +
+        esc(an.programme || "\u2014") + "</td><td>" + esc(fmt(a.submittedAt || a.updatedAt)) + '</td><td><span class="badge ' + esc(a.status) + '">' + esc(LABEL[a.status] || a.status) +
+        '</span></td><td><button type="button" class="btn small" data-id="' + esc(a.id) + '">Review</button></td></tr>'; }).join("");
+    $("emptyNote").textContent = list.length ? "" : (apps.length ? "No applications match these filters." : "No applications yet.");
+  }
+  $("fStatus").addEventListener("change", renderList);
+  $("fSearch").addEventListener("input", renderList);
+  $("rows").addEventListener("click", (e) => { const id = e.target.dataset.id; if (id) openDetail(id); });
+
+  // ---- detail ----
+  function openDetail(id) {
+    const a = apps.find((x) => x.id === id); if (!a) return;
+    const an = a.answers || {}, isDraft = a.status === "draft";
+    const groups = GROUPS.map(([t, fs]) => '<div class="group"><h3>' + esc(t) + "</h3><dl>" + fs.map(([k, l]) => "<dt>" + esc(l) + "</dt><dd>" + esc(val(an[k])) + "</dd>").join("") + "</dl></div>").join("");
+    const opts = ["submitted", "under_review", "accepted", "rejected"].map((s) => '<option value="' + s + '"' + (s === a.status ? " selected" : "") + ">" + LABEL[s] + "</option>").join("");
+    $("detailView").innerHTML = '<div class="card"><button type="button" class="btn ghost small" id="backBtn">&larr; Back to list</button>' +
+      '<div class="top" style="margin-top:1rem"><div><h2>' + esc(an.fullName || "Applicant") + '</h2><p class="sub">Reference ' + esc(id.slice(0, 8).toUpperCase()) + " &middot; " + esc(a.email || "no email") + " &middot; Submitted " + esc(fmt(a.submittedAt)) + '</p></div><span class="badge ' + esc(a.status) + '" id="curBadge">' + esc(LABEL[a.status] || a.status) + "</span></div>" +
+      '<div id="detMsg" class="msg" role="alert" style="margin-top:1rem"></div>' +
+      (isDraft ? '<p class="sub" style="margin-top:1rem">This is a draft. The applicant has not submitted it yet, so its status cannot be changed.</p>'
+        : '<div class="statusbox"><div><label for="newStatus">Update status</label><select id="newStatus">' + opts + '</select></div><button type="button" class="btn" id="saveStatus">Save status</button></div>') +
+      groups + "</div>";
+    $("listView").classList.add("hidden"); $("detailView").classList.remove("hidden"); window.scrollTo(0, 0);
+    $("backBtn").addEventListener("click", () => { $("detailView").classList.add("hidden"); $("listView").classList.remove("hidden"); renderList(); });
+    const sb = $("saveStatus");
+    if (sb) sb.addEventListener("click", async () => {
+      const ns = $("newStatus").value;
+      if (ns === a.status) { msg($("detMsg"), "That is already the current status.", "error"); return; }
+      if ((ns === "accepted" || ns === "rejected") && !confirm("Mark this application as " + LABEL[ns] + "? The applicant will see this decision.")) return;
+      sb.disabled = true; msg($("detMsg"), "", "");
+      try {
+        const ref = doc(db, "applications", id);
+        await updateDoc(ref, { status: ns, reviewedBy: auth.currentUser.uid, statusUpdatedAt: serverTimestamp() });
+        Object.assign(a, (await getDoc(ref)).data());
+        $("curBadge").className = "badge " + a.status; $("curBadge").textContent = LABEL[a.status];
+        msg($("detMsg"), "Status updated to " + LABEL[a.status] + ".", "success");
+      } catch (err) { console.error(err); msg($("detMsg"), "Could not update the status (" + (err.code || "error") + "). Nothing was changed.", "error"); }
+      finally { sb.disabled = false; }
+    });
+  }
+
+  // ---- access control: only accounts listed in the "staff" collection get in ----
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) { show("vSignedOut"); $("signForm").reset(); return; }
+    show("vLoading");
+    try {
+      const staff = await getDoc(doc(db, "staff", user.uid));
+      if (!staff.exists()) { $("deniedText").textContent = "This account is not on the admissions staff list."; $("uidBox").textContent = user.uid; show("vDenied"); return; }
+    } catch (err) {
+      console.error(err);
+      $("deniedText").textContent = "We couldn't verify staff access (" + (err.code || "error") + "). Check that the latest Firestore rules are published.";
+      $("uidBox").textContent = user.uid; show("vDenied"); return;
+    }
+    $("who").textContent = user.email || user.displayName || user.uid;
+    show("vStaff"); loadApps();
+  });
+</script>
+</body>
+</html>
