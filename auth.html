@@ -3,367 +3,255 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sign in</title>
+<title>Apply | Aldermoor University</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
 <style>
   :root {
-    --ink: #14171a;
-    --paper: #f7f6f3;
-    --line: #dcd8d0;
-    --accent: #1f4b43;
-    --accent-soft: #e5efec;
-    --error: #a13d2a;
-    --font-display: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
-    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --navy-900:#071E38; --navy-800:#0A2A4D; --navy-700:#0C447C; --blue-600:#185FA5;
+    --blue-100:#E6F1FB; --blue-50:#F2F7FC; --gold:#C8A24A; --ink:#12233A; --muted:#4A5B72;
+    --line:#DCE4EE; --error:#A13D2A;
+    --font-display:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+    --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--font-body); color:var(--ink); background:var(--blue-50); min-height:100vh; display:flex; flex-direction:column; line-height:1.6; }
+  :focus-visible { outline:3px solid #378ADD; outline-offset:3px; border-radius:4px; }
+  .hidden { display:none !important; }
 
-  * { box-sizing: border-box; }
+  header { background:linear-gradient(120deg,var(--navy-900),var(--navy-700)); color:#fff; }
+  .bar { max-width:1100px; margin:0 auto; padding:1rem 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+  .brand { color:#fff; text-decoration:none; font-family:var(--font-display); font-size:1.25rem; font-weight:700; }
+  .back { color:#DCEAF8; font-size:14px; text-decoration:none; }
+  .back:hover { color:#fff; text-decoration:underline; }
+  .hero { max-width:1100px; margin:0 auto; padding:1.5rem 1.5rem 4rem; }
+  .hero h1 { font-family:var(--font-display); font-size:clamp(1.9rem,4.5vw,3rem); line-height:1.12; margin-bottom:.6rem; }
+  .hero p { color:#DCEAF8; max-width:56ch; }
 
-  body {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--paper);
-    font-family: var(--font-body);
-    color: var(--ink);
-    padding: 24px;
-  }
+  main { flex:1; width:100%; max-width:1100px; margin:-2.5rem auto 3rem; padding:0 1.5rem; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 10px 30px rgba(10,42,77,.14); padding:2rem; }
+  .card.narrow { max-width:440px; margin:0 auto; }
+  .card h2 { font-family:var(--font-display); font-size:1.6rem; color:var(--navy-800); margin-bottom:.35rem; }
+  .sub { color:var(--muted); font-size:15px; margin-bottom:1.5rem; }
 
-  .card {
-    width: 100%;
-    max-width: 380px;
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    padding: 40px 36px;
-    position: relative;
-  }
+  form { display:flex; flex-direction:column; gap:14px; }
+  label { display:block; font-size:14px; font-weight:600; color:var(--navy-800); margin-bottom:6px; }
+  input { width:100%; border:1px solid var(--line); border-radius:8px; padding:12px; font-size:15px; font-family:inherit; background:var(--blue-50); color:var(--ink); }
+  input:focus { border-color:var(--blue-600); box-shadow:0 0 0 3px var(--blue-100); outline:none; }
+  .btn { display:inline-flex; justify-content:center; align-items:center; border:1.5px solid var(--navy-800); border-radius:999px; background:var(--navy-800); color:#fff; padding:.8rem 1.5rem; font:600 15px/1.2 var(--font-body); cursor:pointer; text-decoration:none; transition:background .2s,color .2s; }
+  .btn:hover { background:var(--blue-600); border-color:var(--blue-600); }
+  .btn:disabled { opacity:.6; cursor:not-allowed; }
+  .btn.ghost { background:transparent; color:var(--navy-800); }
+  .btn.ghost:hover { background:var(--navy-800); color:#fff; }
+  .link { background:none; border:none; color:var(--blue-600); font:500 14px var(--font-body); text-decoration:underline; text-underline-offset:2px; cursor:pointer; padding:0; }
+  .row { display:flex; justify-content:flex-end; }
+  .toggle { text-align:center; font-size:14px; color:var(--muted); margin-top:1.25rem; }
+  .message { display:none; font-size:14px; padding:10px 12px; border-radius:8px; margin-bottom:14px; }
+  .message.error { display:block; background:#F8ECE8; color:var(--error); }
+  .message.success { display:block; background:var(--blue-100); color:var(--navy-700); }
 
-  .mark {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: var(--accent);
-    margin-bottom: 22px;
-    position: relative;
-  }
-  .mark::after {
-    content: "";
-    position: absolute;
-    inset: 10px;
-    border-radius: 50%;
-    background: var(--paper);
-  }
+  .welcome { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1.25rem; }
+  .welcome p { color:var(--muted); font-size:15px; word-break:break-all; }
+  .actions { display:flex; gap:10px; flex-wrap:wrap; }
+  iframe { width:100%; height:80vh; min-height:640px; border:1px solid var(--line); border-radius:10px; background:#fff; }
+  .note { margin-top:1rem; font-size:14px; color:var(--muted); }
 
-  h1 {
-    font-family: var(--font-display);
-    font-size: 26px;
-    font-weight: 400;
-    margin: 0 0 6px;
-    letter-spacing: 0.2px;
-  }
 
-  .sub {
-    font-size: 13.5px;
-    color: #6b6560;
-    margin: 0 0 28px;
-    line-height: 1.5;
-  }
+  select, textarea { width:100%; border:1px solid var(--line); border-radius:8px; padding:12px; font-size:15px; font-family:inherit; background:var(--blue-50); color:var(--ink); }
+  select:focus, textarea:focus { border-color:var(--blue-600); box-shadow:0 0 0 3px var(--blue-100); outline:none; }
+  [aria-invalid="true"] { border-color:var(--error); background:#FDF6F4; }
+  .field { margin-bottom:18px; }
+  .fmsg { font-size:13.5px; color:var(--muted); margin-top:5px; min-height:1px; }
+  .fmsg.err { color:var(--error); font-weight:600; }
+  .opt { font-weight:400; color:var(--muted); }
+  .check { display:flex; gap:10px; align-items:flex-start; font-weight:500; color:var(--ink); }
+  .check input { width:auto; margin-top:5px; flex-shrink:0; }
+  .progress { list-style:none; display:flex; gap:8px; margin:1.25rem 0 1.75rem; }
+  .progress li { flex:1; font-size:13px; color:var(--muted); border-top:4px solid var(--line); padding-top:8px; }
+  .progress li.done { border-color:var(--blue-600); color:var(--blue-600); }
+  .progress li.current { border-color:var(--navy-800); color:var(--navy-800); font-weight:700; }
+  .step-title { font-family:var(--font-display); font-size:1.4rem; color:var(--navy-800); margin-bottom:.35rem; }
+  .step-title:focus { outline:none; }
+  .step-note { color:var(--muted); font-size:15px; margin-bottom:1.25rem; }
+  .nav-row { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid var(--line); }
+  .review h4 { display:flex; justify-content:space-between; align-items:center; font-size:15px; color:var(--navy-800); margin:1.25rem 0 .5rem; }
+  .review dl { display:grid; grid-template-columns:minmax(120px,1fr) 2fr; gap:6px 16px; font-size:15px; }
+  .review dt { color:var(--muted); } .review dd { word-break:break-word; white-space:pre-wrap; }
+  .done-box { text-align:center; padding:1.5rem .5rem; }
+  .done-box h3 { font-family:var(--font-display); font-size:1.7rem; color:var(--navy-800); margin-bottom:.5rem; }
+  .ref { display:inline-block; margin:1rem 0; padding:.5rem 1rem; background:var(--blue-100); color:var(--navy-800); border-radius:8px; font-weight:700; letter-spacing:.06em; }
+  @media (max-width:560px) { .progress li span { display:none; } .progress li.current span { display:inline; } .review dl { grid-template-columns:1fr; } .nav-row { flex-wrap:wrap; } }
 
-  form { display: flex; flex-direction: column; gap: 14px; }
-
-  label {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #6b6560;
-    margin-bottom: 6px;
-    display: block;
-  }
-
-  .field { display: flex; flex-direction: column; }
-
-  input[type="email"], input[type="password"] {
-    border: 1px solid var(--line);
-    border-radius: 3px;
-    padding: 11px 12px;
-    font-size: 14.5px;
-    font-family: var(--font-body);
-    background: var(--paper);
-    color: var(--ink);
-    outline: none;
-    transition: border-color 0.15s ease;
-  }
-  input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
-  }
-
-  button {
-    cursor: pointer;
-    border: none;
-    border-radius: 3px;
-    font-family: var(--font-body);
-    font-size: 14.5px;
-    font-weight: 600;
-  }
-
-  .btn-primary {
-    background: var(--accent);
-    color: #fff;
-    padding: 12px;
-    margin-top: 6px;
-  }
-  .btn-primary:hover { background: #163a33; }
-  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-
-  .btn-link {
-    background: none;
-    color: var(--accent);
-    padding: 0;
-    font-weight: 500;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-
-  .row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 13px;
-    margin-top: 4px;
-  }
-
-  .toggle {
-    text-align: center;
-    font-size: 13.5px;
-    color: #6b6560;
-    margin-top: 22px;
-  }
-
-  .message {
-    font-size: 13px;
-    padding: 10px 12px;
-    border-radius: 3px;
-    margin-bottom: 16px;
-    display: none;
-    line-height: 1.4;
-  }
-  .message.error { display: block; background: #f8ece8; color: var(--error); }
-  .message.success { display: block; background: var(--accent-soft); color: var(--accent); }
-
-  .signed-in { text-align: center; }
-  .signed-in .avatar {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: var(--accent-soft);
-    color: var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-size: 20px;
-    margin: 0 auto 16px;
-  }
-  .signed-in .email-display {
-    font-size: 14.5px;
-    color: var(--ink);
-    margin-bottom: 24px;
-    word-break: break-all;
-  }
-
-  .hidden { display: none !important; }
-
-  .status-dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: #c9c2b8; display: inline-block; margin-right: 6px;
-  }
-  .config-warning {
-    font-size: 12px; color: var(--error); background: #f8ece8;
-    padding: 10px 12px; border-radius: 3px; margin-bottom: 18px; line-height: 1.5;
-  }
+  .divider { display:flex; align-items:center; gap:12px; margin:1.25rem 0 .9rem; font-size:13px; color:var(--muted); }
+  .divider::before, .divider::after { content:""; flex:1; height:1px; background:var(--line); }
+  .social { display:grid; gap:10px; }
+  .social-btn { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:.75rem; background:#fff; color:var(--ink); border:1px solid var(--line); border-radius:999px; font:600 15px var(--font-body); cursor:pointer; transition:background .2s,border-color .2s; }
+  .social-btn:hover { background:var(--blue-50); border-color:#378ADD; }
+  .social-btn.apple { background:#000; color:#fff; border-color:#000; }
+  .social-btn.apple:hover { background:#222; }
+  .social-btn i { font-size:20px; }
+  #phonePanel .btn { width:100%; margin-top:12px; }
+  footer { background:var(--navy-900); color:#C9D8EA; text-align:center; font-size:14px; padding:1.25rem; }
+  @media (max-width:560px) { .card { padding:1.4rem; } .hero { padding-bottom:3.5rem; } }
 </style>
 </head>
 <body>
 
-<div class="card">
-  <div class="mark"></div>
-
-  <div id="configWarning" class="config-warning hidden">
-    Firebase config not set. Open this file and fill in <code>firebaseConfig</code> near the bottom of the script.
+<header>
+  <div class="bar">
+    <a class="brand" href="index.html">Aldermoor University</a>
+    <a class="back" href="index.html">&larr; Back to website</a>
   </div>
+  <div class="hero">
+    <h1>Apply to Aldermoor</h1>
+    <p>Applications for the 2026&ndash;27 academic year are now open. Sign in to complete your application.</p>
+  </div>
+</header>
 
-  <div id="message" class="message"></div>
+<main id="main">
+  <div id="loading" class="card narrow"><p class="sub" style="margin:0">Checking your sign-in&hellip;</p></div>
 
-  <!-- Signed out: login/signup -->
-  <div id="authView">
-    <h1 id="formTitle">Sign in</h1>
-    <p class="sub" id="formSub">Welcome back. Enter your details to continue.</p>
-
+  <!-- Signed out -->
+  <section id="signedOut" class="card narrow hidden" aria-labelledby="gateTitle">
+    <h2 id="gateTitle">Sign in to apply</h2>
+    <p class="sub" id="gateSub">Use your Aldermoor account to open the application form.</p>
+    <div id="message" class="message" role="alert"></div>
     <form id="authForm">
-      <div class="field">
-        <label for="email">Email</label>
-        <input type="email" id="email" required autocomplete="email" />
-      </div>
-      <div class="field">
-        <label for="password">Password</label>
-        <input type="password" id="password" required autocomplete="current-password" minlength="6" />
-      </div>
-      <div class="row">
-        <span></span>
-        <button type="button" class="btn-link" id="forgotBtn">Forgot password?</button>
-      </div>
-      <button type="submit" class="btn-primary" id="submitBtn">Sign in</button>
+      <div><label for="email">Email</label><input type="email" id="email" required autocomplete="email" /></div>
+      <div><label for="password">Password</label><input type="password" id="password" required minlength="6" autocomplete="current-password" /></div>
+      <div class="row"><button type="button" class="link" id="forgotBtn">Forgot password?</button></div>
+      <button type="submit" class="btn" id="submitBtn">Sign in</button>
     </form>
 
-    <p class="toggle">
-      <span id="toggleText">Don't have an account?</span>
-      <button type="button" class="btn-link" id="toggleBtn">Create one</button>
-    </p>
-  </div>
+        <div id="socialBox" class="">
+          <div class="divider"><span>or continue with</span></div>
+          <div class="social">
+            <button type="button" class="social-btn" id="googleBtn"><i class="ti ti-brand-google" aria-hidden="true"></i>Continue with Google</button>
+            <button type="button" class="social-btn" id="phoneBtn"><i class="ti ti-phone" aria-hidden="true"></i>Continue with phone</button>
+            <button type="button" class="social-btn apple" id="appleBtn"><i class="ti ti-brand-apple" aria-hidden="true"></i>Continue with Apple</button>
+          </div>
+        </div>
+        <div id="phonePanel" class="hidden">
+          <div>
+            <label for="phoneInput">Phone number</label>
+            <input type="tel" id="phoneInput" placeholder="+91 98765 43210" autocomplete="tel" inputmode="tel" />
+            <p class="fmsg">Include your country code, e.g. +91 or +44.</p>
+          </div>
+          <button type="button" class="btn" id="sendCodeBtn">Send code</button>
+          <div id="codeRow" class="hidden">
+            <div class="" style="margin-top:14px">
+              <label for="codeInput">6-digit code</label>
+              <input type="text" id="codeInput" inputmode="numeric" autocomplete="one-time-code" maxlength="6" />
+            </div>
+            <button type="button" class="btn" id="verifyBtn">Verify and sign in</button>
+          </div>
+          <div id="recaptchaContainer"></div>
+          <p class="toggle"><button type="button" class="link" id="phoneBackBtn">Back to other sign-in options</button></p>
+        </div>
+    <p class="toggle" id="toggleRow"><span id="toggleText">Don't have an account?</span> <button type="button" class="link" id="toggleBtn">Create one</button></p>
+  </section>
 
   <!-- Signed in -->
-  <div id="signedInView" class="signed-in hidden">
-    <div class="avatar" id="avatarInitial">•</div>
-    <div class="email-display" id="userEmail"></div>
-    <button class="btn-primary" id="signOutBtn" style="width:100%;">Sign out</button>
-  </div>
-</div>
+  <section id="signedIn" class="card hidden" aria-labelledby="formTitle">
+    <div class="welcome">
+      <div>
+        <h2 id="formTitle">Your application</h2>
+        <p>Signed in as <strong id="userEmail"></strong> &middot; 2026&ndash;27 intake</p>
+      </div>
+      <div class="actions"><button type="button" class="btn ghost" id="signOutBtn">Sign out</button></div>
+    </div>
+    <div id="appStatus" class="message" role="status" aria-live="polite"></div>
+    <div id="formArea">
+      <ol class="progress" id="progress" aria-label="Application progress"></ol>
+      <form id="appForm" novalidate>
+        <div id="stepBox"></div>
+        <div class="nav-row">
+          <button type="button" class="btn ghost" id="backBtn">Back</button>
+          <button type="button" class="link" id="saveBtn">Save draft</button>
+          <button type="button" class="btn" id="nextBtn">Continue</button>
+        </div>
+      </form>
+    </div>
+    <div id="doneBox" class="done-box hidden" tabindex="-1"></div>
+    <p class="note">Having trouble? You can still use the <a id="newTabLink" href="#" target="_blank" rel="noopener">original Google Form</a>.</p>
+  </section>
+</main>
 
-<!-- Firebase SDK -->
+<footer>&copy; 2026 Aldermoor University. All rights reserved.</footer>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    sendPasswordResetEmail,
-    onAuthStateChanged
+    getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    signOut, sendPasswordResetEmail, onAuthStateChanged,
+    GoogleAuthProvider, OAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  // ---------------------------------------------------------------
-  // 1. Paste your Firebase project config here.
-  //    Get this from: Firebase Console > Project Settings > General
-  //    > Your apps > SDK setup and configuration.
-  // ---------------------------------------------------------------
- // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBjnLNN8BLm9sEJluPnlDhHwS3G9fGTFoA",
-  authDomain: "fir-def09.firebaseapp.com",
-  projectId: "fir-def09",
-  storageBucket: "fir-def09.firebasestorage.app",
-  messagingSenderId: "995080563939",
-  appId: "1:995080563939:web:dec983e691c0d065aee9d6",
-  measurementId: "G-SSE2P4WNEH"
-};
-  const isConfigured = !Object.values(firebaseConfig).some(v => v.startsWith("YOUR_"));
-  if (!isConfigured) {
-    document.getElementById("configWarning").classList.remove("hidden");
+  // Same Firebase project as index.html / auth.html (copied unchanged).
+  const firebaseConfig = {
+    apiKey: "AIzaSyBjnLNN8BLm9sEJluPnlDhHwS3G9fGTFoA",
+    authDomain: "fir-def09.firebaseapp.com",
+    projectId: "fir-def09",
+    storageBucket: "fir-def09.firebasestorage.app",
+    messagingSenderId: "995080563939",
+    appId: "1:995080563939:web:dec983e691c0d065aee9d6",
+    measurementId: "G-SSE2P4WNEH"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Your existing Google Form.
+  const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdoaaptosJzWA2gv4qFaMvo8UYZDNpw7mdfH9JDdMYB3LgDwg/viewform";
+  // OPTIONAL: to pre-fill the applicant's email into the form, paste the number from your
+  // form's "Get pre-filled link" (the digits after "entry.") here. Leave "" to skip.
+  const EMAIL_ENTRY_ID = "";
+
+  const $ = (id) => document.getElementById(id);
+  let mode = "signin";
+
+  function buildUrl(email, embedded) {
+    const params = [];
+    if (embedded) params.push("embedded=true");
+    if (EMAIL_ENTRY_ID) params.push("entry." + EMAIL_ENTRY_ID + "=" + encodeURIComponent(email));
+    return FORM_URL + (params.length ? "?" + params.join("&") : "");
   }
-
-  let app, auth;
-  if (isConfigured) {
-    app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-  }
-
-  // ---- UI state ----
-  let mode = "signin"; // or "signup"
-
-  const authView = document.getElementById("authView");
-  const signedInView = document.getElementById("signedInView");
-  const authForm = document.getElementById("authForm");
-  const emailInput = document.getElementById("email");
-  const passwordInput = document.getElementById("password");
-  const formTitle = document.getElementById("formTitle");
-  const formSub = document.getElementById("formSub");
-  const submitBtn = document.getElementById("submitBtn");
-  const toggleBtn = document.getElementById("toggleBtn");
-  const toggleText = document.getElementById("toggleText");
-  const forgotBtn = document.getElementById("forgotBtn");
-  const signOutBtn = document.getElementById("signOutBtn");
-  const messageEl = document.getElementById("message");
-  const userEmailEl = document.getElementById("userEmail");
-  const avatarInitial = document.getElementById("avatarInitial");
-
-  function showMessage(text, type) {
-    messageEl.textContent = text;
-    messageEl.className = "message " + type;
-  }
-  function clearMessage() {
-    messageEl.className = "message";
-    messageEl.textContent = "";
-  }
+  function showMessage(text, type) { $("message").textContent = text; $("message").className = "message " + type; }
+  function clearMessage() { $("message").className = "message"; $("message").textContent = ""; }
 
   function setMode(next) {
-    mode = next;
-    clearMessage();
-    if (mode === "signin") {
-      formTitle.textContent = "Sign in";
-      formSub.textContent = "Welcome back. Enter your details to continue.";
-      submitBtn.textContent = "Sign in";
-      toggleText.textContent = "Don't have an account?";
-      toggleBtn.textContent = "Create one";
-      forgotBtn.classList.remove("hidden");
-    } else {
-      formTitle.textContent = "Create account";
-      formSub.textContent = "Set an email and password to get started.";
-      submitBtn.textContent = "Create account";
-      toggleText.textContent = "Already have an account?";
-      toggleBtn.textContent = "Sign in";
-      forgotBtn.classList.add("hidden");
-    }
+    mode = next; clearMessage();
+    const signin = mode === "signin";
+    $("gateTitle").textContent = signin ? "Sign in to apply" : "Create your account";
+    $("gateSub").textContent = signin ? "Use your Aldermoor account to open the application form." : "Set an email and password, then you can open the application form.";
+    $("submitBtn").textContent = signin ? "Sign in" : "Create account";
+    $("toggleText").textContent = signin ? "Don't have an account?" : "Already have an account?";
+    $("toggleBtn").textContent = signin ? "Create one" : "Sign in";
+    $("forgotBtn").classList.toggle("hidden", !signin);
+    $("password").autocomplete = signin ? "current-password" : "new-password";
   }
+  $("toggleBtn").addEventListener("click", () => setMode(mode === "signin" ? "signup" : "signin"));
 
-  toggleBtn.addEventListener("click", () => setMode(mode === "signin" ? "signup" : "signin"));
-
-  authForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    if (!isConfigured) {
-      showMessage("Add your Firebase config before signing in.", "error");
-      return;
-    }
-    clearMessage();
-    submitBtn.disabled = true;
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-
+  $("authForm").addEventListener("submit", async (e) => {
+    e.preventDefault(); clearMessage(); $("submitBtn").disabled = true;
+    const email = $("email").value.trim(), password = $("password").value;
     try {
-      if (mode === "signin") {
-        await signInWithEmailAndPassword(auth, email, password);
-      } else {
-        await createUserWithEmailAndPassword(auth, email, password);
-      }
-    } catch (err) {
-      showMessage(friendlyError(err), "error");
-    } finally {
-      submitBtn.disabled = false;
-    }
+      if (mode === "signin") await signInWithEmailAndPassword(auth, email, password);
+      else await createUserWithEmailAndPassword(auth, email, password);
+    } catch (err) { showMessage(friendlyError(err), "error"); }
+    finally { $("submitBtn").disabled = false; }
   });
 
-  forgotBtn.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    if (!email) {
-      showMessage("Enter your email above first, then click Forgot password.", "error");
-      return;
-    }
-    try {
-      await sendPasswordResetEmail(auth, email);
-      showMessage("Password reset email sent. Check your inbox.", "success");
-    } catch (err) {
-      showMessage(friendlyError(err), "error");
-    }
+  $("forgotBtn").addEventListener("click", async () => {
+    const email = $("email").value.trim();
+    if (!email) { showMessage("Enter your email above first, then click Forgot password.", "error"); return; }
+    try { await sendPasswordResetEmail(auth, email); showMessage("Password reset email sent. Check your inbox.", "success"); }
+    catch (err) { showMessage(friendlyError(err), "error"); }
   });
 
-  signOutBtn.addEventListener("click", async () => {
-    await signOut(auth);
-  });
+  $("signOutBtn").addEventListener("click", () => signOut(auth));
 
   function friendlyError(err) {
-    const code = err.code || "";
     const map = {
       "auth/invalid-email": "That email address doesn't look right.",
       "auth/user-not-found": "No account found with that email.",
@@ -371,29 +259,264 @@ const firebaseConfig = {
       "auth/invalid-credential": "Incorrect email or password.",
       "auth/email-already-in-use": "An account with that email already exists.",
       "auth/weak-password": "Password should be at least 6 characters.",
-      "auth/too-many-requests": "Too many attempts. Try again in a moment."
+      "auth/too-many-requests": "Too many attempts. Try again in a moment.",
+      "auth/operation-not-allowed": "This sign-in method isn't switched on yet. Enable it in Firebase Console > Authentication > Sign-in method.",
+      "auth/unauthorized-domain": "This website's domain isn't authorised in Firebase (Authentication > Settings > Authorized domains).",
+      "auth/popup-blocked": "Your browser blocked the sign-in popup. Allow popups for this site and try again.",
+      "auth/account-exists-with-different-credential": "An account with this email already exists using a different sign-in method. Use that method first.",
+      "auth/invalid-phone-number": "That phone number isn't valid. Include the country code, e.g. +91.",
+      "auth/missing-phone-number": "Enter your phone number first.",
+      "auth/invalid-verification-code": "That code is incorrect. Check it and try again.",
+      "auth/code-expired": "That code has expired. Request a new one.",
+      "auth/captcha-check-failed": "The security check failed. Refresh the page and try again.",
+      "auth/quota-exceeded": "The SMS limit has been reached. Try again later.",
+      "auth/billing-not-enabled": "Phone sign-in needs billing enabled on the Firebase project.",
+      "auth/network-request-failed": "Network problem. Check your connection and try again."
     };
-    return map[code] || "Something went wrong. Please try again.";
+    return map[err.code] || "Something went wrong. Please try again.";
   }
 
-  if (isConfigured) {
-    onAuthStateChanged(auth, (user) => {
-      clearMessage();
-      if (user) {
-        authView.classList.add("hidden");
-        signedInView.classList.remove("hidden");
-        userEmailEl.textContent = user.email;
-        avatarInitial.textContent = (user.email || "?").charAt(0).toUpperCase();
-      } else {
-        authView.classList.remove("hidden");
-        signedInView.classList.add("hidden");
-        authForm.reset();
-      }
+
+  // ================= APPLICATION FORM (saved to Cloud Firestore) =================
+  const PROGRAMMES = {
+    "Sciences": ["Physics","Biology","Chemistry","Environmental Sciences"],
+    "Engineering & Computing": ["Software Engineering","Civil Engineering","Electrical Engineering","Mechanical Engineering"],
+    "Business & Economics": ["Finance","Management","Marketing","Global Trade","Economics"],
+    "Humanities": ["History","Philosophy","Literature","Linguistics"],
+    "Medicine & Health": ["Clinical Medicine","Nursing","Public Health","Pharmacy"],
+    "Arts & Design": ["Fine Arts","Graphic Design","Architecture","Film"]
+  };
+  let answers = {}, errors = {}, cur = 0, createdAt = null, saving = false;
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const STEPS = [
+    { title: "Personal details", fields: [
+      { id: "fullName", label: "Full name", type: "text", required: true, max: 100, ac: "name" },
+      { id: "dob", label: "Date of birth", type: "date", required: true },
+      { id: "phone", label: "Phone number", type: "tel", required: true, ac: "tel", pattern: /^[+()\d\s-]{7,20}$/, patternMsg: "Enter a valid phone number." },
+      { id: "country", label: "Country of residence", type: "text", required: true, max: 80, ac: "country-name" }] },
+    { title: "Programme", note: "Intake: 2026\u201327 academic year", fields: [
+      { id: "level", label: "Level of study", type: "select", required: true, options: () => ["Undergraduate", "Postgraduate"] },
+      { id: "field", label: "Field of study", type: "select", required: true, options: () => Object.keys(PROGRAMMES) },
+      { id: "programme", label: "Programme", type: "select", required: true, options: () => PROGRAMMES[answers.field] || [], help: "Choose a field of study first." }] },
+    { title: "Education", fields: [
+      { id: "qualification", label: "Highest qualification completed", type: "select", required: true, options: () => ["Secondary school certificate", "Bachelor's degree", "Master's degree", "Other"] },
+      { id: "institution", label: "Most recent school or university", type: "text", required: true, max: 150 },
+      { id: "gradYear", label: "Year of completion", type: "number", required: true, min: 1980, max: 2030 },
+      { id: "grade", label: "Grade or result", type: "text", required: false, max: 60 }] },
+    { title: "Statement", fields: [
+      { id: "statement", label: "Why do you want to study this programme at Aldermoor?", type: "textarea", required: true, min: 50, max: 1500, help: "50 to 1,500 characters." },
+      { id: "declaration", label: "I confirm that the information I have given is accurate.", type: "checkbox", required: true },
+      { id: "consent", label: "I agree to Aldermoor University using my information to process my application.", type: "checkbox", required: true }] }
+  ];
+  const REVIEW = STEPS.length;
+  const esc = (t) => String(t ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  function setStatus(text, type) { $("appStatus").textContent = text; $("appStatus").className = "message" + (text ? " " + type : ""); }
+
+  function check(f) {
+    const v = answers[f.id];
+    if (f.type === "checkbox") return f.required && v !== true ? "Please tick this box to continue." : "";
+    const s = (v == null ? "" : String(v)).trim();
+    if (!s) return f.required ? "This field is required." : "";
+    if (f.type === "textarea" && s.length < f.min) return "Please write at least " + f.min + " characters.";
+    if (f.type === "number") { const n = Number(s); if (!Number.isInteger(n) || n < f.min || n > f.max) return "Enter a year between " + f.min + " and " + f.max + "."; }
+    if (f.type === "date" && (s > todayStr || s < "1900-01-01")) return "Enter a valid date of birth.";
+    if (f.pattern && !f.pattern.test(s)) return f.patternMsg;
+    if (f.type === "select" && !f.options().includes(s)) return "Choose one of the options.";
+    return "";
+  }
+  function validateStep(i) {
+    let first = null;
+    STEPS[i].fields.forEach((f) => { const m = check(f); if (m) { errors[f.id] = m; first = first || f.id; } else delete errors[f.id]; });
+    return first;
+  }
+  const optsHtml = (f, v) => '<option value="">Select\u2026</option>' + f.options().map((o) => '<option' + (o === v ? " selected" : "") + ">" + esc(o) + "</option>").join("");
+
+  function fieldHtml(f) {
+    const v = answers[f.id] ?? "", id = "f_" + f.id, err = errors[f.id];
+    const msg = '<p class="fmsg' + (err ? " err" : "") + '" id="' + id + '_m">' + esc(err || f.help || "") + "</p>";
+    const a = ' id="' + id + '" data-id="' + f.id + '" aria-describedby="' + id + '_m"' + (err ? ' aria-invalid="true"' : "") + (f.required ? ' aria-required="true"' : "");
+    if (f.type === "checkbox") return '<div class="field"><label class="check"><input type="checkbox"' + a + (v === true ? " checked" : "") + "><span>" + esc(f.label) + " <span aria-hidden=\"true\">*</span></span></label>" + msg + "</div>";
+    const lab = '<label for="' + id + '">' + esc(f.label) + (f.required ? ' <span aria-hidden="true">*</span>' : ' <span class="opt">(optional)</span>') + "</label>";
+    let ctl;
+    if (f.type === "select") ctl = "<select" + a + ">" + optsHtml(f, v) + "</select>";
+    else if (f.type === "textarea") ctl = "<textarea" + a + ' rows="6" maxlength="' + f.max + '">' + esc(v) + "</textarea>";
+    else ctl = '<input type="' + f.type + '"' + a + ' value="' + esc(v) + '"' + (f.max && f.type === "text" ? ' maxlength="' + f.max + '"' : "") + (f.type === "number" ? ' min="' + f.min + '" max="' + f.max + '" inputmode="numeric"' : "") + (f.type === "date" ? ' max="' + todayStr + '"' : "") + (f.ac ? ' autocomplete="' + f.ac + '"' : "") + ">";
+    return '<div class="field">' + lab + ctl + msg + "</div>";
+  }
+  function reviewHtml() {
+    let h = '<h3 class="step-title" id="stepTitle" tabindex="-1">Review your answers</h3><p class="step-note">Check everything below. You can go back and edit any section before submitting.</p><div class="review"><dl><dt>Account</dt><dd>' + esc(auth.currentUser.email || auth.currentUser.phoneNumber || "") + "</dd></dl>";
+    STEPS.forEach((st, i) => {
+      h += '<h4><span>' + esc(st.title) + '</span><button type="button" class="link" data-goto="' + i + '">Edit</button></h4><dl>';
+      st.fields.forEach((f) => { const v = answers[f.id]; h += "<dt>" + esc(f.type === "checkbox" ? "Confirmed" : f.label) + "</dt><dd>" + esc(f.type === "checkbox" ? (v === true ? "Yes" : "No") : (v || "\u2014")) + "</dd>"; });
+      h += "</dl>";
     });
+    return h + "</div>";
+  }
+  function render() {
+    $("progress").innerHTML = STEPS.concat([{ title: "Review" }]).map((st, i) => '<li class="' + (i < cur ? "done" : i === cur ? "current" : "") + '"' + (i === cur ? ' aria-current="step"' : "") + "><span>" + (i + 1) + ". " + esc(st.title) + "</span></li>").join("");
+    $("stepBox").innerHTML = cur === REVIEW ? reviewHtml()
+      : '<h3 class="step-title" id="stepTitle" tabindex="-1">' + esc(STEPS[cur].title) + "</h3>" + (STEPS[cur].note ? '<p class="step-note">' + esc(STEPS[cur].note) + "</p>" : '<p class="step-note">Fields marked * are required.</p>') + STEPS[cur].fields.map(fieldHtml).join("");
+    $("backBtn").disabled = cur === 0;
+    $("nextBtn").textContent = cur === REVIEW ? "Submit application" : "Continue";
+    $("nextBtn").disabled = $("saveBtn").disabled = saving;
+  }
+  function go(i, focusId) {
+    cur = i; render();
+    const el = focusId ? $("f_" + focusId) : $("stepTitle");
+    if (el) el.focus();
+    if (!focusId) $("signedIn").scrollIntoView({ block: "start" });
   }
 
+  $("stepBox").addEventListener("input", onChange);
+  $("stepBox").addEventListener("change", onChange);
+  function onChange(e) {
+    const id = e.target.dataset.id; if (!id) return;
+    answers[id] = e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    delete errors[id]; e.target.removeAttribute("aria-invalid");
+    const m = $("f_" + id + "_m"); m.className = "fmsg"; m.textContent = id === "programme" ? "Choose a field of study first." : "";
+    if (id === "field") { answers.programme = ""; const pf = STEPS[1].fields[2]; $("f_programme").innerHTML = optsHtml(pf, ""); $("f_programme_m").textContent = answers.field ? "" : pf.help; }
+    if (id === "programme" && answers.field) m.textContent = "";
+  }
+  $("stepBox").addEventListener("click", (e) => { const g = e.target.dataset.goto; if (g !== undefined) go(Number(g)); });
+  $("backBtn").addEventListener("click", () => { setStatus("", ""); go(cur - 1); });
+  $("nextBtn").addEventListener("click", () => {
+    setStatus("", "");
+    if (cur === REVIEW) return submitApplication();
+    const bad = validateStep(cur);
+    if (bad) { render(); $("f_" + bad).focus(); setStatus("Please fix the highlighted fields.", "error"); return; }
+    go(cur + 1);
+  });
+  $("saveBtn").addEventListener("click", async () => {
+    if (!await persist("draft")) return;
+    setStatus("Draft saved. You can come back and finish later.", "success");
+  });
+  $("appForm").addEventListener("submit", (e) => e.preventDefault());
+
+  function saveError(e) {
+    const c = e && e.code || "error";
+    if (c === "unavailable" || c === "deadline-exceeded") return "We couldn't reach the server. Check your connection and try again. Nothing was saved. (" + c + ")";
+    return "We couldn't save your application, so it has NOT been submitted. Please try again, or use the original Google Form below. (" + c + ")";
+  }
+  async function persist(status) {
+    const user = auth.currentUser; if (!user || saving) return false;
+    saving = true; render(); setStatus("Saving\u2026", "success");
+    try {
+      const ref = doc(db, "applications", user.uid);
+      const data = { applicantUid: user.uid, email: user.email || "", status, answers: { ...answers }, createdAt: createdAt || serverTimestamp(), updatedAt: serverTimestamp() };
+      if (status === "submitted") data.submittedAt = serverTimestamp();
+      await setDoc(ref, data);                          // resolves only when the server accepts the write
+      if (!createdAt) createdAt = (await getDoc(ref)).data().createdAt;
+      setStatus("", ""); return true;
+    } catch (err) { console.error(err); setStatus(saveError(err), "error"); return false; }
+    finally { saving = false; render(); }
+  }
+  async function submitApplication() {
+    for (let i = 0; i < STEPS.length; i++) {
+      const bad = validateStep(i);
+      if (bad) { go(i, bad); setStatus("Some answers need attention before you can submit.", "error"); return; }
+    }
+    if (await persist("submitted")) showDone();
+  }
+  function showDone(d) {
+    const a = d ? d.answers : answers, uid = auth.currentUser.uid;
+    $("formArea").classList.add("hidden"); $("doneBox").classList.remove("hidden");
+    $("doneBox").innerHTML = "<h3>Application submitted</h3><p>" + (d ? "You have already submitted your application" : "Thank you. Your application has been saved") + " for <strong>" + esc(a.programme) + "</strong> (" + esc(a.field) + "), 2026\u201327 intake.</p><div class=\"ref\">Reference: " + esc(uid.slice(0, 8).toUpperCase()) + "</div><p class=\"sub\">Please keep this reference. Your application can no longer be edited.</p>";
+    setStatus("", ""); $("doneBox").focus();
+  }
+  function resetApp() {
+    answers = {}; errors = {}; cur = 0; createdAt = null; saving = false;
+    $("formArea").classList.remove("hidden"); $("doneBox").classList.add("hidden"); $("doneBox").innerHTML = ""; setStatus("", "");
+  }
+  async function loadApplication(user) {
+    resetApp();
+    try {
+      const snap = await getDoc(doc(db, "applications", user.uid));
+      if (snap.exists()) {
+        const d = snap.data(); createdAt = d.createdAt; answers = { ...(d.answers || {}) };
+        if (d.status === "submitted") return showDone(d);
+        setStatus("Your saved draft has been restored.", "success");
+      }
+    } catch (err) { console.error(err); setStatus("We couldn't load any saved application (" + (err.code || "error") + "). You can still fill in the form.", "error"); }
+    render();
+  }
+
+
+  // ---------- Google / Apple / Phone sign-in ----------
+  const SHOW_APPLE = true;   // set to false to hide the Apple button until Apple sign-in is set up
+  const HIDE = document.getElementById("authOverlay") ? "auth-hidden" : "hidden";
+  const $s = (id) => document.getElementById(id);
+  let recaptcha = null, confirmation = null;
+  if (!SHOW_APPLE) $s("appleBtn").classList.add(HIDE);
+
+  async function socialSignIn(provider) {
+    if (!auth) { showMessage("Firebase is not configured.", "error"); return; }
+    clearMessage();
+    try { await signInWithPopup(auth, provider); }
+    catch (err) {
+      if (err.code !== "auth/popup-closed-by-user" && err.code !== "auth/cancelled-popup-request") showMessage(friendlyError(err), "error");
+    }
+  }
+  $s("googleBtn").addEventListener("click", () => {
+    const p = new GoogleAuthProvider(); p.setCustomParameters({ prompt: "select_account" }); socialSignIn(p);
+  });
+  $s("appleBtn").addEventListener("click", () => {
+    const p = new OAuthProvider("apple.com"); p.addScope("email"); p.addScope("name"); socialSignIn(p);
+  });
+
+  function resetRecaptcha() {
+    try { if (recaptcha) recaptcha.clear(); } catch (e) {}
+    recaptcha = null; $s("recaptchaContainer").innerHTML = "";
+  }
+  function showPhone(on) {
+    $s("phonePanel").classList.toggle(HIDE, !on);
+    ["authForm", "socialBox", "toggleRow"].forEach((id) => $s(id).classList.toggle(HIDE, on));
+    if (!on) { $s("codeRow").classList.add(HIDE); $s("phoneInput").value = ""; $s("codeInput").value = ""; confirmation = null; resetRecaptcha(); }
+    clearMessage();
+    if (on) $s("phoneInput").focus();
+  }
+  $s("phoneBtn").addEventListener("click", () => { if (!auth) { showMessage("Firebase is not configured.", "error"); return; } showPhone(true); });
+  $s("phoneBackBtn").addEventListener("click", () => showPhone(false));
+
+  $s("sendCodeBtn").addEventListener("click", async () => {
+    clearMessage();
+    const phone = $s("phoneInput").value.replace(/[\s()-]/g, "");
+    if (!/^\+[1-9]\d{7,14}$/.test(phone)) { showMessage("Enter your number with the country code, for example +919876543210.", "error"); return; }
+    const btn = $s("sendCodeBtn"); btn.disabled = true;
+    try {
+      if (!recaptcha) recaptcha = new RecaptchaVerifier(auth, "recaptchaContainer", { size: "invisible" });
+      confirmation = await signInWithPhoneNumber(auth, phone, recaptcha);
+      $s("codeRow").classList.remove(HIDE);
+      showMessage("We sent a 6-digit code to " + phone + ". Enter it below.", "success");
+      $s("codeInput").focus();
+    } catch (err) { showMessage(friendlyError(err), "error"); resetRecaptcha(); }
+    finally { btn.disabled = false; }
+  });
+  $s("verifyBtn").addEventListener("click", async () => {
+    clearMessage();
+    const code = $s("codeInput").value.trim();
+    if (!confirmation || !/^\d{6}$/.test(code)) { showMessage("Enter the 6-digit code we sent you.", "error"); return; }
+    const btn = $s("verifyBtn"); btn.disabled = true;
+    try { await confirmation.confirm(code); }
+    catch (err) { showMessage(friendlyError(err), "error"); }
+    finally { btn.disabled = false; }
+  });
+
+  // Show the form ONLY while a user is signed in.
+  onAuthStateChanged(auth, (user) => {
+    $("loading").classList.add("hidden");
+    if (user) {
+      $("signedOut").classList.add("hidden");
+      $("signedIn").classList.remove("hidden");
+      $("userEmail").textContent = user.email || user.phoneNumber || user.displayName || "your account";
+      $("newTabLink").href = buildUrl(user.email || "", false);
+      loadApplication(user);
+    } else {
+      $("signedIn").classList.add("hidden");
+      $("signedOut").classList.remove("hidden");
+      $("authForm").reset(); clearMessage(); resetApp(); showPhone(false);
+    }
+  });
   setMode("signin");
 </script>
-
 </body>
 </html>
