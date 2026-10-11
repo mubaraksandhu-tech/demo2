@@ -206,6 +206,7 @@
       .footer-top { grid-template-columns: 1fr 1fr; }
       .footer-top > :first-child { grid-column: 1 / -1; }
     }
+    @media (max-width: 700px) { .nav-username { display: none; } }
     @media (max-width: 560px) {
       .wrap { padding: 0 1.25rem; }
       .nav-name { font-size: 16px; }
@@ -271,6 +272,7 @@
         <a href="#" class="nav-login" id="navLoginBtn" onclick="openAuthModal('signin'); return false;">Log in</a>
         <a href="apply.html" class="nav-cta" id="navApplyBtn">Apply now</a>
         <div class="nav-user auth-hidden" id="navUser">
+          <a href="dashboard.html" class="nav-login" id="navDashboardLink">My application</a>
           <span class="nav-username" id="navUsername"></span>
           <button class="nav-logout" id="navLogoutBtn">Logout</button>
         </div>
