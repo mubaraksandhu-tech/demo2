@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Apply | Aldermoor University</title>
+<style>
+  :root {
+    --navy-900:#071E38; --navy-800:#0A2A4D; --navy-700:#0C447C; --blue-600:#185FA5;
+    --blue-100:#E6F1FB; --blue-50:#F2F7FC; --gold:#C8A24A; --ink:#12233A; --muted:#4A5B72;
+    --line:#DCE4EE; --error:#A13D2A;
+    --font-display:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+    --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--font-body); color:var(--ink); background:var(--blue-50); min-height:100vh; display:flex; flex-direction:column; line-height:1.6; }
+  :focus-visible { outline:3px solid #378ADD; outline-offset:3px; border-radius:4px; }
+  .hidden { display:none !important; }
+
+  header { background:linear-gradient(120deg,var(--navy-900),var(--navy-700)); color:#fff; }
+  .bar { max-width:1100px; margin:0 auto; padding:1rem 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+  .brand { color:#fff; text-decoration:none; font-family:var(--font-display); font-size:1.25rem; font-weight:700; }
+  .back { color:#DCEAF8; font-size:14px; text-decoration:none; }
+  .back:hover { color:#fff; text-decoration:underline; }
+  .hero { max-width:1100px; margin:0 auto; padding:1.5rem 1.5rem 4rem; }
+  .hero h1 { font-family:var(--font-display); font-size:clamp(1.9rem,4.5vw,3rem); line-height:1.12; margin-bottom:.6rem; }
+  .hero p { color:#DCEAF8; max-width:56ch; }
+
+  main { flex:1; width:100%; max-width:1100px; margin:-2.5rem auto 3rem; padding:0 1.5rem; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 10px 30px rgba(10,42,77,.14); padding:2rem; }
+  .card.narrow { max-width:440px; margin:0 auto; }
+  .card h2 { font-family:var(--font-display); font-size:1.6rem; color:var(--navy-800); margin-bottom:.35rem; }
+  .sub { color:var(--muted); font-size:15px; margin-bottom:1.5rem; }
+
+  form { display:flex; flex-direction:column; gap:14px; }
+  label { display:block; font-size:14px; font-weight:600; color:var(--navy-800); margin-bottom:6px; }
+  input { width:100%; border:1px solid var(--line); border-radius:8px; padding:12px; font-size:15px; font-family:inherit; background:var(--blue-50); color:var(--ink); }
+  input:focus { border-color:var(--blue-600); box-shadow:0 0 0 3px var(--blue-100); outline:none; }
+  .btn { display:inline-flex; justify-content:center; align-items:center; border:1.5px solid var(--navy-800); border-radius:999px; background:var(--navy-800); color:#fff; padding:.8rem 1.5rem; font:600 15px/1.2 var(--font-body); cursor:pointer; text-decoration:none; transition:background .2s,color .2s; }
+  .btn:hover { background:var(--blue-600); border-color:var(--blue-600); }
+  .btn:disabled { opacity:.6; cursor:not-allowed; }
+  .btn.ghost { background:transparent; color:var(--navy-800); }
+  .btn.ghost:hover { background:var(--navy-800); color:#fff; }
+  .link { background:none; border:none; color:var(--blue-600); font:500 14px var(--font-body); text-decoration:underline; text-underline-offset:2px; cursor:pointer; padding:0; }
+  .row { display:flex; justify-content:flex-end; }
+  .toggle { text-align:center; font-size:14px; color:var(--muted); margin-top:1.25rem; }
+  .message { display:none; font-size:14px; padding:10px 12px; border-radius:8px; margin-bottom:14px; }
+  .message.error { display:block; background:#F8ECE8; color:var(--error); }
+  .message.success { display:block; background:var(--blue-100); color:var(--navy-700); }
+
+  .welcome { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1.25rem; }
+  .welcome p { color:var(--muted); font-size:15px; word-break:break-all; }
+  .actions { display:flex; gap:10px; flex-wrap:wrap; }
+  iframe { width:100%; height:80vh; min-height:640px; border:1px solid var(--line); border-radius:10px; background:#fff; }
+  .note { margin-top:1rem; font-size:14px; color:var(--muted); }
+
+  footer { background:var(--navy-900); color:#C9D8EA; text-align:center; font-size:14px; padding:1.25rem; }
+  @media (max-width:560px) { .card { padding:1.4rem; } .hero { padding-bottom:3.5rem; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <a class="brand" href="index.html">Aldermoor University</a>
+    <a class="back" href="index.html">&larr; Back to website</a>
+  </div>
+  <div class="hero">
+    <h1>Apply to Aldermoor</h1>
+    <p>Applications for the 2026&ndash;27 academic year are now open. Sign in to complete your application.</p>
+  </div>
+</header>
+
+<main id="main">
+  <div id="loading" class="card narrow"><p class="sub" style="margin:0">Checking your sign-in&hellip;</p></div>
+
+  <!-- Signed out -->
+  <section id="signedOut" class="card narrow hidden" aria-labelledby="gateTitle">
+    <h2 id="gateTitle">Sign in to apply</h2>
+    <p class="sub" id="gateSub">Use your Aldermoor account to open the application form.</p>
+    <div id="message" class="message" role="alert"></div>
+    <form id="authForm">
+      <div><label for="email">Email</label><input type="email" id="email" required autocomplete="email" /></div>
+      <div><label for="password">Password</label><input type="password" id="password" required minlength="6" autocomplete="current-password" /></div>
+      <div class="row"><button type="button" class="link" id="forgotBtn">Forgot password?</button></div>
+      <button type="submit" class="btn" id="submitBtn">Sign in</button>
+    </form>
+    <p class="toggle"><span id="toggleText">Don't have an account?</span> <button type="button" class="link" id="toggleBtn">Create one</button></p>
+  </section>
+
+  <!-- Signed in -->
+  <section id="signedIn" class="card hidden" aria-labelledby="formTitle">
+    <div class="welcome">
+      <div>
+        <h2 id="formTitle">Your application</h2>
+        <p>Signed in as <strong id="userEmail"></strong></p>
+      </div>
+      <div class="actions">
+        <a class="btn ghost" id="newTabLink" href="#" target="_blank" rel="noopener">Open form in a new tab</a>
+        <button type="button" class="btn ghost" id="signOutBtn">Sign out</button>
+      </div>
+    </div>
+    <iframe id="formFrame" title="Aldermoor University application form" src="about:blank">Loading&hellip;</iframe>
+    <p class="note">If the form does not display, use &ldquo;Open form in a new tab&rdquo; above.</p>
+  </section>
+</main>
+
+<footer>&copy; 2026 Aldermoor University. All rights reserved.</footer>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    signOut, sendPasswordResetEmail, onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  // Same Firebase project as index.html / auth.html (copied unchanged).
+  const firebaseConfig = {
+    apiKey: "AIzaSyBjnLNN8BLm9sEJluPnlDhHwS3G9fGTFoA",
+    authDomain: "fir-def09.firebaseapp.com",
+    projectId: "fir-def09",
+    storageBucket: "fir-def09.firebasestorage.app",
+    messagingSenderId: "995080563939",
+    appId: "1:995080563939:web:dec983e691c0d065aee9d6",
+    measurementId: "G-SSE2P4WNEH"
+  };
+  const auth = getAuth(initializeApp(firebaseConfig));
+
+  // Your existing Google Form.
+  const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdoaaptosJzWA2gv4qFaMvo8UYZDNpw7mdfH9JDdMYB3LgDwg/viewform";
+  // OPTIONAL: to pre-fill the applicant's email into the form, paste the number from your
+  // form's "Get pre-filled link" (the digits after "entry.") here. Leave "" to skip.
+  const EMAIL_ENTRY_ID = "";
+
+  const $ = (id) => document.getElementById(id);
+  let mode = "signin";
+
+  function buildUrl(email, embedded) {
+    const params = [];
+    if (embedded) params.push("embedded=true");
+    if (EMAIL_ENTRY_ID) params.push("entry." + EMAIL_ENTRY_ID + "=" + encodeURIComponent(email));
+    return FORM_URL + (params.length ? "?" + params.join("&") : "");
+  }
+  function showMessage(text, type) { $("message").textContent = text; $("message").className = "message " + type; }
+  function clearMessage() { $("message").className = "message"; $("message").textContent = ""; }
+
+  function setMode(next) {
+    mode = next; clearMessage();
+    const signin = mode === "signin";
+    $("gateTitle").textContent = signin ? "Sign in to apply" : "Create your account";
+    $("gateSub").textContent = signin ? "Use your Aldermoor account to open the application form." : "Set an email and password, then you can open the application form.";
+    $("submitBtn").textContent = signin ? "Sign in" : "Create account";
+    $("toggleText").textContent = signin ? "Don't have an account?" : "Already have an account?";
+    $("toggleBtn").textContent = signin ? "Create one" : "Sign in";
+    $("forgotBtn").classList.toggle("hidden", !signin);
+    $("password").autocomplete = signin ? "current-password" : "new-password";
+  }
+  $("toggleBtn").addEventListener("click", () => setMode(mode === "signin" ? "signup" : "signin"));
+
+  $("authForm").addEventListener("submit", async (e) => {
+    e.preventDefault(); clearMessage(); $("submitBtn").disabled = true;
+    const email = $("email").value.trim(), password = $("password").value;
+    try {
+      if (mode === "signin") await signInWithEmailAndPassword(auth, email, password);
+      else await createUserWithEmailAndPassword(auth, email, password);
+    } catch (err) { showMessage(friendlyError(err), "error"); }
+    finally { $("submitBtn").disabled = false; }
+  });
+
+  $("forgotBtn").addEventListener("click", async () => {
+    const email = $("email").value.trim();
+    if (!email) { showMessage("Enter your email above first, then click Forgot password.", "error"); return; }
+    try { await sendPasswordResetEmail(auth, email); showMessage("Password reset email sent. Check your inbox.", "success"); }
+    catch (err) { showMessage(friendlyError(err), "error"); }
+  });
+
+  $("signOutBtn").addEventListener("click", () => signOut(auth));
+
+  function friendlyError(err) {
+    const map = {
+      "auth/invalid-email": "That email address doesn't look right.",
+      "auth/user-not-found": "No account found with that email.",
+      "auth/wrong-password": "Incorrect password.",
+      "auth/invalid-credential": "Incorrect email or password.",
+      "auth/email-already-in-use": "An account with that email already exists.",
+      "auth/weak-password": "Password should be at least 6 characters.",
+      "auth/too-many-requests": "Too many attempts. Try again in a moment."
+    };
+    return map[err.code] || "Something went wrong. Please try again.";
+  }
+
+  // Show the form ONLY while a user is signed in.
+  onAuthStateChanged(auth, (user) => {
+    $("loading").classList.add("hidden");
+    if (user) {
+      $("signedOut").classList.add("hidden");
+      $("signedIn").classList.remove("hidden");
+      $("userEmail").textContent = user.email;
+      $("formFrame").src = buildUrl(user.email, true);
+      $("newTabLink").href = buildUrl(user.email, false);
+    } else {
+      $("signedIn").classList.add("hidden");
+      $("signedOut").classList.remove("hidden");
+      $("formFrame").src = "about:blank";
+      $("authForm").reset(); clearMessage();
+    }
+  });
+  setMode("signin");
+</script>
+</body>
+</html>
