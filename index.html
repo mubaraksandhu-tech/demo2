@@ -4,363 +4,545 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aldermoor University</title>
+  <meta name="description" content="Aldermoor University prepares students to lead, innovate, and shape a more equitable world through research, collaboration, and academic tradition." />
+  <meta name="theme-color" content="#0A2A4D" />
+  <script>document.documentElement.classList.add('js');</script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
   <style>
+    :root {
+      --navy-900: #071E38;
+      --navy-800: #0A2A4D;
+      --navy-700: #0C447C;
+      --blue-600: #185FA5;
+      --blue-400: #378ADD;
+      --blue-200: #B5D4F4;
+      --blue-100: #E6F1FB;
+      --blue-50:  #F2F7FC;
+      --gold: #C8A24A;
+      --ink: #12233A;
+      --muted: #4A5B72;
+      --line: #DCE4EE;
+      --surface: #FFFFFF;
+      --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+      --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --radius: 14px;
+      --shadow-sm: 0 1px 2px rgba(10,42,77,.06), 0 2px 8px rgba(10,42,77,.06);
+      --shadow-md: 0 10px 30px rgba(10,42,77,.14);
+      --wrap: 1180px;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; color: #1a1a1a; background: #fff; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); color: var(--ink); background: var(--surface); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; }
+    .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 2rem; }
+
+    /* Accessibility */
+    :focus-visible { outline: 3px solid var(--blue-400); outline-offset: 3px; border-radius: 4px; }
+    .skip-link { position: absolute; left: 1rem; top: -60px; background: var(--navy-800); color: #fff; padding: .6rem 1rem; border-radius: 8px; z-index: 2000; text-decoration: none; font-weight: 600; }
+    .skip-link:focus { top: 1rem; }
 
     /* NAV */
-    .nav {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 2rem; border-bottom: 1px solid #e5e5e5;
-      background: #fff; position: sticky; top: 0; z-index: 10;
-    }
-    .nav-logo { display: flex; align-items: center; gap: 10px; }
-    .nav-emblem {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: #185FA5; display: flex; align-items: center; justify-content: center;
-    }
-    .nav-emblem i { color: #E6F1FB; font-size: 18px; }
-    .nav-name { font-size: 15px; font-weight: 600; }
-    .nav-links { display: flex; gap: 1.5rem; }
-    .nav-links a {
-      font-size: 13px; color: #555; text-decoration: none; transition: color 0.2s;
-    }
-    .nav-links a:hover { color: #1a1a1a; }
-    .nav-cta {
-      font-size: 13px; padding: 6px 16px; border-radius: 8px;
-      border: 1px solid #185FA5; color: #185FA5; background: transparent;
-      cursor: pointer; text-decoration: none; font-weight: 600;
-    }
-    .nav-cta:hover { background: #185FA5; color: #fff; }
+    .nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); transition: box-shadow .25s; }
+    .nav.scrolled { box-shadow: 0 6px 24px rgba(10,42,77,.10); }
+    .nav-inner { max-width: var(--wrap); margin: 0 auto; padding: .8rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--navy-800); }
+    .nav-emblem { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(145deg, var(--navy-700), var(--navy-900)); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--gold); flex-shrink: 0; }
+    .nav-emblem i { color: #fff; font-size: 20px; }
+    .nav-name { display: flex; flex-direction: column; line-height: 1.1; font-family: var(--font-display); font-size: 19px; font-weight: 700; letter-spacing: .01em; }
+    .nav-name small { font-family: var(--font-body); font-size: 11.5px; font-weight: 600; letter-spacing: .14em; color: var(--blue-600); margin-top: 3px; }
+    .nav-links { display: flex; gap: .25rem; }
+    .nav-links a { font-size: 14.5px; font-weight: 500; color: var(--muted); text-decoration: none; padding: .5rem .85rem; border-radius: 8px; transition: color .2s, background .2s; }
+    .nav-links a:hover { color: var(--navy-800); background: var(--blue-50); }
     .nav-actions { display: flex; align-items: center; gap: 10px; }
-    .nav-login {
-      font-size: 13px; padding: 6px 14px; color: #185FA5;
-      text-decoration: none; font-weight: 600; border-radius: 8px;
-    }
-    .nav-login:hover { background: #E6F1FB; }
-    .nav-user { display: flex; align-items: center; gap: 10px; }
-    .nav-username {
-      font-size: 13px; font-weight: 600; color: #14171a;
-      max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .nav-logout {
-      font-size: 13px; padding: 6px 14px; border-radius: 8px;
-      border: 1px solid #185FA5; color: #185FA5; background: transparent;
-      cursor: pointer; font-weight: 600; font-family: inherit;
-    }
-    .nav-logout:hover { background: #185FA5; color: #fff; }
-
-    html { scroll-behavior: smooth; }
-    .section[id], .cta-strip[id] { scroll-margin-top: 72px; }
+    .nav-login, .nav-cta, .nav-logout { font-family: inherit; font-size: 14px; font-weight: 600; padding: .55rem 1.1rem; border-radius: 999px; text-decoration: none; cursor: pointer; line-height: 1.2; transition: background .2s, color .2s, border-color .2s, transform .2s, box-shadow .2s; }
+    .nav-login { color: var(--navy-800); background: transparent; border: 1px solid transparent; }
+    .nav-login:hover { background: var(--blue-50); }
+    .nav-cta { background: var(--navy-800); color: #fff; border: 1px solid var(--navy-800); }
+    .nav-cta:hover { background: var(--blue-600); border-color: var(--blue-600); box-shadow: 0 6px 16px rgba(24,95,165,.3); }
+    .nav-logout { background: transparent; color: var(--navy-800); border: 1px solid var(--navy-800); }
+    .nav-logout:hover { background: var(--navy-800); color: #fff; }
+    .nav-user { display: flex; align-items: center; gap: 12px; }
+    .nav-username { font-size: 14px; font-weight: 600; color: var(--ink); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .nav-menu-btn { display: none; width: 42px; height: 42px; border-radius: 10px; border: 1px solid var(--line); background: #fff; color: var(--navy-800); font-size: 22px; cursor: pointer; align-items: center; justify-content: center; }
 
     /* HERO */
-    .hero {
-      background: #042C53; color: #E6F1FB;
-      padding: 5rem 2rem 4rem; text-align: center;
-    }
-    .hero-eyebrow {
-      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-      color: #85B7EB; margin-bottom: 1rem;
-    }
-    .hero h1 {
-      font-size: 42px; font-weight: 600; line-height: 1.2;
-      color: #E6F1FB; max-width: 640px; margin: 0 auto 1.25rem;
-    }
-    .hero h1 em { font-style: normal; color: #85B7EB; }
-    .hero p {
-      font-size: 16px; color: #B5D4F4; max-width: 520px;
-      margin: 0 auto 2rem; line-height: 1.7;
-    }
-    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-    .btn-primary {
-      padding: 10px 24px; border-radius: 8px;
-      background: #378ADD; color: #E6F1FB; border: none; cursor: pointer;
-      font-size: 14px; font-weight: 600; text-decoration: none;
-    }
-    .btn-primary:hover { background: #2a6fb5; }
-    .btn-outline {
-      padding: 10px 24px; border-radius: 8px;
-      background: transparent; color: #B5D4F4;
-      border: 1px solid #378ADD; cursor: pointer;
-      font-size: 14px; text-decoration: none;
-    }
-    .btn-outline:hover { background: #185FA5; }
-    .hero-stats {
-      display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
-      margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #185FA5;
-    }
-    .stat-item { text-align: center; }
-    .stat-num { font-size: 28px; font-weight: 600; color: #E6F1FB; }
-    .stat-label { font-size: 12px; color: #85B7EB; margin-top: 2px; }
+    .hero { position: relative; isolation: isolate; color: #fff; background: linear-gradient(135deg, var(--navy-900), var(--navy-700)); overflow: hidden; }
+    .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+    .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(100deg, rgba(7,30,56,.92) 0%, rgba(7,30,56,.72) 48%, rgba(7,30,56,.35) 100%), linear-gradient(0deg, rgba(7,30,56,.7), transparent 45%); }
+    .hero-inner { padding-top: clamp(4.5rem, 11vw, 8.5rem); padding-bottom: 2.5rem; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: .75rem; font-size: 14px; color: var(--blue-200); margin-bottom: 1.5rem; }
+    .hero-eyebrow::before { content: ""; width: 36px; height: 2px; background: var(--gold); }
+    .hero h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2.3rem, 5.6vw, 4.4rem); line-height: 1.08; letter-spacing: -.01em; max-width: 14ch; margin-bottom: 1.4rem; text-wrap: balance; }
+    .hero h1 em { font-style: italic; font-weight: 500; }
+    .hero-lead { font-size: clamp(1rem, 1.6vw, 1.15rem); color: #DCEAF8; max-width: 56ch; line-height: 1.7; margin-bottom: 2.2rem; }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary, .btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: .9rem 1.8rem; border-radius: 999px; font-family: inherit; font-size: 15px; font-weight: 600; text-decoration: none; cursor: pointer; border: 1.5px solid transparent; transition: background .2s, color .2s, border-color .2s, transform .2s, box-shadow .2s; }
+    .btn-primary { background: #fff; color: var(--navy-800); }
+    .btn-primary:hover { background: var(--blue-100); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.25); }
+    .btn-outline { background: rgba(255,255,255,.06); color: #fff; border-color: rgba(255,255,255,.7); }
+    .btn-outline:hover { background: #fff; color: var(--navy-800); transform: translateY(-2px); }
+    .hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: clamp(3rem, 7vw, 5.5rem); padding-top: 1.75rem; border-top: 1px solid rgba(255,255,255,.22); }
+    .stat-num { font-family: var(--font-display); font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 600; line-height: 1.1; }
+    .stat-label { font-size: 14px; color: var(--blue-200); margin-top: 4px; }
 
     /* SECTIONS */
-    .section { padding: 3.5rem 2rem; }
-    .section-bg { background: #f5f5f3; }
-    .section-label {
-      font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
-      color: #888; margin-bottom: 0.5rem;
-    }
-    .section-title { font-size: 26px; font-weight: 600; margin-bottom: 2rem; }
+    .section { padding: clamp(3.5rem, 8vw, 6rem) 0; }
+    .section[id], .cta-strip[id] { scroll-margin-top: 76px; }
+    .section-bg { background: var(--blue-50); }
+    .section-head { margin-bottom: 2.5rem; max-width: 60ch; }
+    .section-label { font-size: 14px; font-weight: 600; color: var(--blue-600); margin-bottom: .5rem; display: flex; align-items: center; gap: .6rem; }
+    .section-label::before { content: ""; width: 22px; height: 2px; background: var(--gold); }
+    .section-title { font-family: var(--font-display); font-size: clamp(1.8rem, 3.4vw, 2.6rem); font-weight: 600; line-height: 1.15; color: var(--navy-800); letter-spacing: -.005em; }
 
-    /* PROGRAMS */
-    .programs-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px;
-    }
-    .program-card {
-      background: #fff; border: 1px solid #e5e5e5;
-      border-radius: 12px; padding: 1.25rem;
-      cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .program-card:hover { border-color: #378ADD; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
-    .program-icon {
-      width: 36px; height: 36px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 0.75rem;
-    }
-    .program-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-    .program-card p { font-size: 12px; color: #666; line-height: 1.5; }
+    /* CARDS: programmes + campus life */
+    .programs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+    .program-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.75rem; min-height: 210px; transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; }
+    .program-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--blue-400); }
+    .program-icon { width: 52px; height: 52px; border-radius: 14px; background: var(--blue-100); color: var(--blue-600); display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 1.25rem; transition: background .3s, color .3s; }
+    .program-card:hover .program-icon { background: var(--navy-800); color: #fff; }
+    button.program-card { display: block; width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+    .program-card span { display: block; }
+    .pc-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; color: var(--navy-800); margin-bottom: .5rem; line-height: 1.25; }
+    .pc-desc { font-size: 15px; color: var(--muted); line-height: 1.6; }
+    .pc-more { margin-top: 1rem; font-size: 14px; font-weight: 600; color: var(--blue-600); }
+    .pc-more i { display: inline-block; transition: transform .3s; vertical-align: middle; }
+    .program-card[aria-expanded="true"] { border-color: var(--blue-600); box-shadow: var(--shadow-md); }
+    .program-card[aria-expanded="true"] .program-icon { background: var(--navy-800); color: #fff; }
+    .program-card[aria-expanded="true"] .pc-more i { transform: rotate(180deg); }
+    .section-sub { margin-top: .75rem; font-size: 16px; color: var(--muted); }
+
+    .field-panel { margin-top: 24px; display: grid; grid-template-columns: 340px 1fr; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-md); scroll-margin-top: 90px; animation: panelIn .45s ease; }
+    .field-panel[hidden] { display: none; }
+    @keyframes panelIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    .fp-img { background: linear-gradient(135deg, var(--navy-700), var(--blue-600)); min-height: 220px; }
+    .fp-img img { width: 100%; height: 100%; object-fit: cover; }
+    .fp-body { padding: 2rem; }
+    .fp-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: .5rem; }
+    .fp-head h3 { font-family: var(--font-display); font-size: 1.7rem; font-weight: 600; color: var(--navy-800); line-height: 1.2; }
+    .fp-close { flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: #fff; color: var(--navy-800); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s; }
+    .fp-close:hover { background: var(--blue-100); }
+    .fp-intro { color: var(--muted); margin-bottom: 1.25rem; }
+    .fp-list { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+    .fp-list li { background: var(--blue-50); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.1rem; transition: border-color .2s, transform .2s; }
+    .fp-list li:hover { border-color: var(--blue-400); transform: translateY(-2px); }
+    .fp-list h4 { font-size: 15.5px; font-weight: 600; color: var(--navy-800); margin-bottom: .25rem; }
+    .fp-list p { font-size: 14px; color: var(--muted); line-height: 1.5; }
+    .fp-body .btn-primary { background: var(--navy-800); color: #fff; }
+    .fp-body .btn-primary:hover { background: var(--blue-600); color: #fff; }
+
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+    .feature { padding: 1.75rem; border-left: 3px solid var(--gold); background: var(--blue-50); border-radius: 0 var(--radius) var(--radius) 0; }
+    .feature i { font-size: 28px; color: var(--blue-600); }
+    .feature h3 { font-family: var(--font-display); font-size: 1.25rem; color: var(--navy-800); margin: .75rem 0 .4rem; }
+    .feature p { font-size: 15px; color: var(--muted); }
+
+    .gallery { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 190px; gap: 12px; margin-top: 2.5rem; }
+    .gallery figure { overflow: hidden; border-radius: var(--radius); background: linear-gradient(135deg, var(--navy-700), var(--blue-600)); }
+    .gallery figure:first-child { grid-column: span 2; grid-row: span 2; }
+    .gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+    .gallery figure:hover img { transform: scale(1.05); }
+
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; counter-reset: step; }
+    .step { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1.75rem; }
+    .step::before { counter-increment: step; content: counter(step); display: flex; width: 40px; height: 40px; border-radius: 50%; background: var(--navy-800); color: #fff; font-family: var(--font-display); font-size: 1.1rem; align-items: center; justify-content: center; margin-bottom: 1rem; }
+    .step h3 { font-family: var(--font-display); font-size: 1.2rem; color: var(--navy-800); margin-bottom: .4rem; }
+    .step p { font-size: 15px; color: var(--muted); }
+
+
+    .photo-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; }
+    .photo-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--blue-400); }
+    .photo-frame { aspect-ratio: 16 / 10; overflow: hidden; background: linear-gradient(135deg, var(--navy-700), var(--blue-600)); }
+    .photo-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+    .photo-card:hover .photo-frame img { transform: scale(1.05); }
+    .photo-body { padding: 1.4rem 1.5rem 1.6rem; flex: 1; }
+    .photo-body h3 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; color: var(--navy-800); line-height: 1.3; margin-bottom: .5rem; display: flex; align-items: center; gap: .6rem; }
+    .photo-body h3 i { color: var(--blue-600); font-size: 22px; }
+    .photo-body p { font-size: 15px; color: var(--muted); }
 
     /* NEWS */
-    .news-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;
-    }
-    .news-card {
-      background: #fff; border: 1px solid #e5e5e5;
-      border-radius: 12px; overflow: hidden;
-    }
-    .news-thumb {
-      height: 100px; display: flex; align-items: center;
-      justify-content: center; font-size: 32px;
-    }
-    .news-body { padding: 1rem; }
-    .news-tag {
-      font-size: 11px; padding: 2px 8px; border-radius: 8px;
-      display: inline-block; margin-bottom: 6px; font-weight: 600;
-    }
-    .news-body h3 { font-size: 13px; font-weight: 600; line-height: 1.5; margin-bottom: 4px; }
-    .news-body p { font-size: 12px; color: #888; }
+    .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .news-tag { font-size: 12.5px; padding: 3px 11px; border-radius: 999px; display: inline-block; margin-bottom: .75rem; font-weight: 600; background: var(--blue-100); color: var(--navy-700); }
+    .photo-body .news-date { font-size: 14px; color: var(--muted); margin-top: .6rem; }
+    .news-card h3 { display: block; }
 
-    /* CTA STRIP */
-    .cta-strip {
-      background: #0C447C; padding: 3rem 2rem; text-align: center;
-    }
-    .cta-strip h2 { font-size: 24px; font-weight: 600; color: #E6F1FB; margin-bottom: 0.75rem; }
-    .cta-strip p { font-size: 15px; color: #85B7EB; margin-bottom: 1.5rem; }
+    /* ABOUT */
+    .about-text { max-width: 62ch; font-size: 17px; color: var(--muted); line-height: 1.8; border-left: 3px solid var(--gold); padding-left: 1.5rem; }
+
+    /* CTA */
+    .cta-strip { position: relative; overflow: hidden; background: linear-gradient(120deg, var(--navy-900), var(--navy-700)); padding: clamp(3.5rem, 8vw, 5.5rem) 2rem; text-align: center; color: #fff; }
+    .cta-strip::after { content: ""; position: absolute; width: 420px; height: 420px; border-radius: 50%; right: -120px; top: -160px; border: 60px solid rgba(255,255,255,.05); pointer-events: none; }
+    .cta-strip h2 { font-family: var(--font-display); font-size: clamp(1.8rem, 3.6vw, 2.7rem); font-weight: 600; margin-bottom: .75rem; position: relative; }
+    .cta-strip p { font-size: 17px; color: var(--blue-200); margin-bottom: 2rem; position: relative; }
+    .cta-strip .btn-primary { position: relative; }
 
     /* FOOTER */
-    footer {
-      background: #f5f5f3; border-top: 1px solid #e5e5e5;
-      padding: 2rem; display: flex; justify-content: space-between;
-      align-items: center; flex-wrap: wrap; gap: 1rem;
-    }
-    .footer-left { font-size: 13px; color: #888; }
-    .footer-links { display: flex; gap: 1.5rem; }
-    .footer-links a { font-size: 12px; color: #888; text-decoration: none; }
-    .footer-links a:hover { color: #1a1a1a; }
+    footer { background: var(--navy-900); color: #C9D8EA; }
+    .footer-top { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 2.5rem; padding: 3.5rem 0 2.5rem; }
+    .footer-brand { display: flex; align-items: center; gap: 12px; color: #fff; font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; margin-bottom: .9rem; }
+    .footer-about { font-size: 15px; max-width: 36ch; }
+    footer h2 { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 1rem; }
+    footer ul { list-style: none; display: grid; gap: .6rem; }
+    footer a { color: #C9D8EA; text-decoration: none; font-size: 15px; transition: color .2s; }
+    footer a:hover { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.14); padding: 1.4rem 0; font-size: 14px; }
+
+    /* SCROLL REVEAL */
+    .js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; transition-delay: var(--d, 0s); }
+    .js .reveal.in { opacity: 1; transform: none; }
 
     /* RESPONSIVE */
-    @media (max-width: 600px) {
-      .nav-links { display: none; }
-      .hero h1 { font-size: 28px; }
-      .hero-stats { gap: 1rem; }
+    @media (max-width: 980px) {
+      .field-panel { grid-template-columns: 1fr; }
+      .fp-img { min-height: 200px; max-height: 240px; }
+      .gallery { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 150px; }
+      .nav-menu-btn { display: inline-flex; }
+      .nav-links { display: none; position: absolute; left: 0; right: 0; top: 100%; flex-direction: column; background: #fff; padding: .75rem 1.25rem 1rem; border-bottom: 1px solid var(--line); box-shadow: 0 16px 24px rgba(10,42,77,.12); }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: .85rem; font-size: 16px; }
+      .nav-inner { padding: .7rem 1.25rem; gap: .75rem; }
+      .nav-actions { margin-left: auto; }
+      .hero-stats { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .footer-top > :first-child { grid-column: 1 / -1; }
     }
+    @media (max-width: 560px) {
+      .wrap { padding: 0 1.25rem; }
+      .nav-name { font-size: 16px; }
+      .nav-name small { font-size: 10px; }
+      .nav-emblem { width: 36px; height: 36px; }
+      .nav-login, .nav-cta, .nav-logout { padding: .5rem .8rem; font-size: 13px; }
+      .nav-username { max-width: 90px; }
+      .hero-btns .btn-primary, .hero-btns .btn-outline { width: 100%; }
+      .footer-top { grid-template-columns: 1fr; }
+      .fp-body { padding: 1.4rem; }
+    }
+    @media (max-width: 380px) { .nav-name small { display: none; } .nav-login { padding: .5rem .5rem; } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+      .js .reveal { opacity: 1; transform: none; }
+      .program-card:hover, .photo-card:hover, .btn-primary:hover, .btn-outline:hover { transform: none; }
+      .photo-card:hover .photo-frame img, .gallery figure:hover img { transform: none; }
+      .field-panel { animation: none; }
+    }
+
+    /* Login modal: restyled to match the navy theme (markup and logic untouched) */
+    #authOverlay .auth-card { border-radius: 16px; border-color: var(--line); box-shadow: var(--shadow-md); }
+    #authOverlay .auth-mark { background: var(--navy-800); }
+    #authOverlay .auth-btn-primary { background: var(--navy-800); border-radius: 999px; }
+    #authOverlay .auth-btn-primary:hover { background: var(--blue-600); }
+    #authOverlay .auth-btn-link { color: var(--blue-600); }
+    #authOverlay .auth-card input:focus { border-color: var(--blue-600); box-shadow: 0 0 0 3px var(--blue-100); }
+    #authOverlay .auth-message.success { background: var(--blue-100); color: var(--navy-700); }
+    #authOverlay .auth-close:hover { color: var(--navy-800); }
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to main content</a>
 
   <!-- NAVIGATION -->
-  <nav class="nav">
-    <div class="nav-logo">
-      <div class="nav-emblem"><i class="ti ti-building-arch"></i></div>
-      <span class="nav-name">Aldermoor University</span>
-    </div>
-    <div class="nav-links">
-      <a href="#academics">Academics</a>
-      <a href="#research">Research</a>
-      <a href="#campus-life">Campus life</a>
-      <a href="#admissions">Admissions</a>
-      <a href="#about">About</a>
-    </div>
-    <div class="nav-actions">
-      <a href="#" class="nav-login" id="navLoginBtn" onclick="openAuthModal('signin'); return false;">Log in</a>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdoaaptosJzWA2gv4qFaMvo8UYZDNpw7mdfH9JDdMYB3LgDwg/viewform" target="_blank" rel="noopener" class="nav-cta" id="navApplyBtn">Apply now</a>
-      <div class="nav-user auth-hidden" id="navUser">
-        <span class="nav-username" id="navUsername"></span>
-        <button class="nav-logout" id="navLogoutBtn">Logout</button>
+  <header class="nav" id="siteNav">
+    <nav class="nav-inner" aria-label="Main navigation">
+      <a href="#" class="nav-logo" aria-label="Aldermoor University, back to top">
+        <span class="nav-emblem" aria-hidden="true"><i class="ti ti-building-arch"></i></span>
+        <span class="nav-name">Aldermoor<small>UNIVERSITY</small></span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#academics">Academics</a>
+        <a href="#research">Research</a>
+        <a href="#campus-life">Campus life</a>
+        <a href="#admissions">Admissions</a>
+        <a href="#about">About</a>
       </div>
-    </div>
-  </nav>
+      <div class="nav-actions">
+        <a href="#" class="nav-login" id="navLoginBtn" onclick="openAuthModal('signin'); return false;">Log in</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdoaaptosJzWA2gv4qFaMvo8UYZDNpw7mdfH9JDdMYB3LgDwg/viewform" target="_blank" rel="noopener" class="nav-cta" id="navApplyBtn">Apply now</a>
+        <div class="nav-user auth-hidden" id="navUser">
+          <span class="nav-username" id="navUsername"></span>
+          <button class="nav-logout" id="navLogoutBtn">Logout</button>
+        </div>
+        <button class="nav-menu-btn" id="navMenuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><i class="ti ti-menu-2" aria-hidden="true"></i></button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
 
   <!-- HERO -->
-  <div class="hero">
-    <p class="hero-eyebrow">Founded 1887 &nbsp;·&nbsp; Oxford, England</p>
-    <h1>Where curiosity becomes <em>discovery</em></h1>
-    <p>Aldermoor University prepares students to lead, innovate, and shape a more equitable world — through research, collaboration, and a century of academic tradition.</p>
-    <div class="hero-btns">
-      <a href="#" class="btn-primary">Explore programmes</a>
-      <a href="#" class="btn-outline">Virtual campus tour</a>
-    </div>
-    <div class="hero-stats">
-      <div class="stat-item">
-        <div class="stat-num">24,000+</div>
-        <div class="stat-label">Students enrolled</div>
+  <section class="hero" aria-labelledby="heroTitle">
+    <img class="hero-img" src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1800&q=70" alt="Historic university campus building with lawns and trees" width="1800" height="1200" fetchpriority="high" referrerpolicy="no-referrer" onerror="this.style.display='none'" />
+    <div class="wrap hero-inner">
+      <p class="hero-eyebrow">Founded 1887 &nbsp;·&nbsp; Oxford, England</p>
+      <h1 id="heroTitle">Where curiosity becomes <em>discovery</em></h1>
+      <p class="hero-lead">Aldermoor University prepares students to lead, innovate, and shape a more equitable world — through research, collaboration, and a century of academic tradition.</p>
+      <div class="hero-btns">
+        <a href="#academics" class="btn-primary">Explore programmes</a>
+        <a href="#campus-life" class="btn-outline">Virtual campus tour</a>
       </div>
-      <div class="stat-item">
-        <div class="stat-num">180+</div>
-        <div class="stat-label">Degree programmes</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">92%</div>
-        <div class="stat-label">Graduate employment rate</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">60+</div>
-        <div class="stat-label">Research centres</div>
+      <div class="hero-stats">
+        <div class="stat-item"><div class="stat-num">24,000+</div><div class="stat-label">Students enrolled</div></div>
+        <div class="stat-item"><div class="stat-num">180+</div><div class="stat-label">Degree programmes</div></div>
+        <div class="stat-item"><div class="stat-num">92%</div><div class="stat-label">Graduate employment rate</div></div>
+        <div class="stat-item"><div class="stat-num">60+</div><div class="stat-label">Research centres</div></div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- WHY ALDERMOOR -->
+  <section class="section" id="why">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="section-label">Why Aldermoor</p>
+        <h2 class="section-title">A place to think, build and belong</h2>
+      </div>
+      <div class="features">
+        <article class="feature reveal"><i class="ti ti-flask" aria-hidden="true"></i><h3>Research-led teaching</h3><p>Learn from academics who are active in their fields, with chances to join real research projects.</p></article>
+        <article class="feature reveal" style="--d:.08s"><i class="ti ti-world" aria-hidden="true"></i><h3>A global community</h3><p>Study alongside students from many backgrounds and build friendships and networks that last.</p></article>
+        <article class="feature reveal" style="--d:.16s"><i class="ti ti-briefcase" aria-hidden="true"></i><h3>Support for your future</h3><p>Careers guidance, mentoring and practical experience to help you move confidently into work or further study.</p></article>
+      </div>
+    </div>
+  </section>
 
   <!-- PROGRAMMES -->
-  <div class="section section-bg" id="academics">
-    <p class="section-label">Academics</p>
-    <p class="section-title">Find your field</p>
-    <div class="programs-grid">
-      <div class="program-card">
-        <div class="program-icon" style="background:#E6F1FB;">
-          <i class="ti ti-microscope" style="color:#185FA5;font-size:18px;"></i>
-        </div>
-        <h3>Sciences</h3>
-        <p>Physics, biology, chemistry, and environmental sciences</p>
+  <section class="section section-bg" id="academics">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="section-label">Academics</p>
+        <h2 class="section-title">Find your field</h2>
+        <p class="section-sub">Select a field to see the programmes it includes.</p>
       </div>
-      <div class="program-card">
-        <div class="program-icon" style="background:#EEEDFE;">
-          <i class="ti ti-code" style="color:#534AB7;font-size:18px;"></i>
-        </div>
-        <h3>Engineering &amp; Computing</h3>
-        <p>Software, civil, electrical, and mechanical engineering</p>
+      <div class="programs-grid">
+        <button type="button" class="program-card reveal" data-field="sciences" aria-expanded="false" aria-controls="fieldPanel"><span class="program-icon" aria-hidden="true"><i class="ti ti-microscope"></i></span><span class="pc-title">Sciences</span><span class="pc-desc">Physics, biology, chemistry, and environmental sciences</span><span class="pc-more">View programmes <i class="ti ti-chevron-down" aria-hidden="true"></i></span></button>
+        <button type="button" class="program-card reveal" style="--d:.06s" data-field="engineering" aria-expanded="false" aria-controls="fieldPanel"><span class="program-icon" aria-hidden="true"><i class="ti ti-code"></i></span><span class="pc-title">Engineering &amp; Computing</span><span class="pc-desc">Software, civil, electrical, and mechanical engineering</span><span class="pc-more">View programmes <i class="ti ti-chevron-down" aria-hidden="true"></i></span></button>
+        <button type="button" class="program-card reveal" style="--d:.12s" data-field="business" aria-expanded="false" aria-controls="fieldPanel"><span class="program-icon" aria-hidden="true"><i class="ti ti-chart-line"></i></span><span class="pc-title">Business &amp; Economics</span><span class="pc-desc">Finance, management, marketing, and global trade</span><span class="pc-more">View programmes <i class="ti ti-chevron-down" aria-hidden="true"></i></span></button>
+        <button type="button" class="program-card reveal" data-field="humanities" aria-expanded="false" aria-controls="fieldPanel"><span class="program-icon" aria-hidden="true"><i class="ti ti-book"></i></span><span class="pc-title">Humanities</span><span class="pc-desc">History, philosophy, literature, and linguistics</span><span class="pc-more">View programmes <i class="ti ti-chevron-down" aria-hidden="true"></i></span></button>
+        <button type="button" class="program-card reveal" style="--d:.06s" data-field="medicine" aria-expanded="false" aria-controls="fieldPanel"><span class="program-icon" aria-hidden="true"><i class="ti ti-stethoscope"></i></span><span class="pc-title">Medicine &amp; Health</span><span class="pc-desc">Clinical medicine, nursing, public health, and pharmacy</span><span class="pc-more">View programmes <i class="ti ti-chevron-down" aria-hidden="true"></i></span></button>
+        <button type="button" class="program-card reveal" style="--d:.12s" data-field="arts" aria-expanded="false" aria-controls="fieldPanel"><span class="program-icon" aria-hidden="true"><i class="ti ti-palette"></i></span><span class="pc-title">Arts &amp; Design</span><span class="pc-desc">Fine arts, graphic design, architecture, and film</span><span class="pc-more">View programmes <i class="ti ti-chevron-down" aria-hidden="true"></i></span></button>
       </div>
-      <div class="program-card">
-        <div class="program-icon" style="background:#EAF3DE;">
-          <i class="ti ti-chart-line" style="color:#3B6D11;font-size:18px;"></i>
-        </div>
-        <h3>Business &amp; Economics</h3>
-        <p>Finance, management, marketing, and global trade</p>
-      </div>
-      <div class="program-card">
-        <div class="program-icon" style="background:#FAEEDA;">
-          <i class="ti ti-book" style="color:#854F0B;font-size:18px;"></i>
-        </div>
-        <h3>Humanities</h3>
-        <p>History, philosophy, literature, and linguistics</p>
-      </div>
-      <div class="program-card">
-        <div class="program-icon" style="background:#FAECE7;">
-          <i class="ti ti-stethoscope" style="color:#993C1D;font-size:18px;"></i>
-        </div>
-        <h3>Medicine &amp; Health</h3>
-        <p>Clinical medicine, nursing, public health, and pharmacy</p>
-      </div>
-      <div class="program-card">
-        <div class="program-icon" style="background:#E1F5EE;">
-          <i class="ti ti-palette" style="color:#0F6E56;font-size:18px;"></i>
-        </div>
-        <h3>Arts &amp; Design</h3>
-        <p>Fine arts, graphic design, architecture, and film</p>
-      </div>
+      <div class="field-panel" id="fieldPanel" role="region" aria-label="Programmes in the selected field" aria-live="polite" hidden></div>
     </div>
-  </div>
+  </section>
 
   <!-- CAMPUS LIFE -->
-  <div class="section" id="campus-life">
-    <p class="section-label">Campus life</p>
-    <p class="section-title">More than lectures</p>
-    <div class="programs-grid">
-      <div class="program-card">
-        <div class="program-icon" style="background:#E6F1FB;">
-          <i class="ti ti-home" style="color:#185FA5;font-size:18px;"></i>
-        </div>
-        <h3>Residences</h3>
-        <p>On-campus housing across 14 residence halls for first-year and returning students</p>
+  <section class="section" id="campus-life">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="section-label">Campus life</p>
+        <h2 class="section-title">More than lectures</h2>
       </div>
-      <div class="program-card">
-        <div class="program-icon" style="background:#EAF3DE;">
-          <i class="ti ti-ball-football" style="color:#3B6D11;font-size:18px;"></i>
-        </div>
-        <h3>Sport &amp; recreation</h3>
-        <p>Over 40 varsity and intramural teams, plus a full-service fitness centre</p>
+      <div class="news-grid">
+        <article class="photo-card reveal">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=70" alt="Students walking past university buildings on campus" width="800" height="500" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" /></div>
+          <div class="photo-body"><h3><i class="ti ti-home" aria-hidden="true"></i>Residences</h3><p>On-campus housing across 14 residence halls for first-year and returning students</p></div>
+        </article>
+        <article class="photo-card reveal" style="--d:.08s">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=800&q=70" alt="Athlete running on a sports track" width="800" height="500" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" /></div>
+          <div class="photo-body"><h3><i class="ti ti-ball-football" aria-hidden="true"></i>Sport &amp; recreation</h3><p>Over 40 varsity and intramural teams, plus a full-service fitness centre</p></div>
+        </article>
+        <article class="photo-card reveal" style="--d:.16s">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=70" alt="Group of students collaborating around a table" width="800" height="500" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" /></div>
+          <div class="photo-body"><h3><i class="ti ti-users" aria-hidden="true"></i>Clubs &amp; societies</h3><p>180+ student-run societies spanning academics, culture, and the arts</p></div>
+        </article>
       </div>
-      <div class="program-card">
-        <div class="program-icon" style="background:#EEEDFE;">
-          <i class="ti ti-users" style="color:#534AB7;font-size:18px;"></i>
-        </div>
-        <h3>Clubs &amp; societies</h3>
-        <p>180+ student-run societies spanning academics, culture, and the arts</p>
+      <div class="gallery" role="group" aria-label="Photo gallery of campus life">
+        <figure class="reveal"><img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=900&q=70" alt="Historic university building surrounded by green lawns" width="800" height="600" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" /></figure>
+        <figure class="reveal"><img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=900&q=70" alt="Tall library shelves filled with books" width="800" height="600" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" /></figure>
+        <figure class="reveal"><img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=70" alt="Students working together at a table" width="800" height="600" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" /></figure>
+        <figure class="reveal"><img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=900&q=70" alt="Graduates celebrating in caps and gowns" width="800" height="600" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" /></figure>
+        <figure class="reveal"><img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=900&q=70" alt="Open books and notes on a study desk" width="800" height="600" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" /></figure>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- NEWS -->
-  <div class="section" id="research">
-    <p class="section-label">Latest from Aldermoor</p>
-    <p class="section-title">News &amp; research</p>
-    <div class="news-grid">
-      <div class="news-card">
-        <div class="news-thumb" style="background:#E6F1FB;">🔬</div>
-        <div class="news-body">
-          <span class="news-tag" style="background:#E6F1FB;color:#0C447C;">Research</span>
-          <h3>Aldermoor team develops low-cost water purification method</h3>
-          <p>June 2026</p>
-        </div>
+  <section class="section section-bg" id="research">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="section-label">Latest from Aldermoor</p>
+        <h2 class="section-title">News &amp; research</h2>
       </div>
-      <div class="news-card">
-        <div class="news-thumb" style="background:#EAF3DE;">🏆</div>
-        <div class="news-body">
-          <span class="news-tag" style="background:#EAF3DE;color:#27500A;">Award</span>
-          <h3>Professor Nkosi receives Royal Society fellowship</h3>
-          <p>May 2026</p>
-        </div>
-      </div>
-      <div class="news-card">
-        <div class="news-thumb" style="background:#EEEDFE;">🎓</div>
-        <div class="news-body">
-          <span class="news-tag" style="background:#EEEDFE;color:#3C3489;">Campus</span>
-          <h3>Record 4,800 students graduate at summer ceremony</h3>
-          <p>May 2026</p>
-        </div>
+      <div class="news-grid">
+        <article class="photo-card news-card reveal">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=70" alt="Researcher working with equipment in a science laboratory" width="800" height="500" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" /></div>
+          <div class="photo-body"><span class="news-tag">Research</span><h3>Aldermoor team develops low-cost water purification method</h3><p class="news-date"><time datetime="2026-06">June 2026</time></p></div>
+        </article>
+        <article class="photo-card news-card reveal" style="--d:.08s">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=70" alt="Lecture hall with an academic presenting to an audience" width="800" height="500" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" /></div>
+          <div class="photo-body"><span class="news-tag">Award</span><h3>Professor Nkosi receives Royal Society fellowship</h3><p class="news-date"><time datetime="2026-05">May 2026</time></p></div>
+        </article>
+        <article class="photo-card news-card reveal" style="--d:.16s">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=70" alt="Graduates in caps and gowns celebrating at a ceremony" width="800" height="500" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" /></div>
+          <div class="photo-body"><span class="news-tag">Campus</span><h3>Record 4,800 students graduate at summer ceremony</h3><p class="news-date"><time datetime="2026-05">May 2026</time></p></div>
+        </article>
+        <article class="photo-card news-card reveal" style="--d:0s">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=70" alt="Students reading in a bright university library" width="800" height="500" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" /></div>
+          <div class="photo-body"><span class="news-tag">Campus</span><h3>New library study spaces open to students</h3><p class="news-date"><time datetime="2026-04">April 2026</time></p></div>
+        </article>
+        <article class="photo-card news-card reveal" style="--d:0.08s">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=70" alt="Student coding on a laptop" width="800" height="500" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" /></div>
+          <div class="photo-body"><span class="news-tag">Award</span><h3>Engineering students place in national design challenge</h3><p class="news-date"><time datetime="2026-04">April 2026</time></p></div>
+        </article>
+        <article class="photo-card news-card reveal" style="--d:0.16s">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=70" alt="Colourful artwork created by a student" width="800" height="500" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" /></div>
+          <div class="photo-body"><span class="news-tag">Arts</span><h3>Student art and design showcase opens to the public</h3><p class="news-date"><time datetime="2026-03">March 2026</time></p></div>
+        </article>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- ABOUT -->
-  <div class="section section-bg" id="about">
-    <p class="section-label">About</p>
-    <p class="section-title">Nearly 140 years of academic tradition</p>
-    <p style="max-width:640px;font-size:14px;color:#555;line-height:1.7;">
-      Founded in 1887 in Oxford, England, Aldermoor University has grown from a single
-      teaching college into a research-intensive institution spanning six faculties.
-      Our mission is to advance knowledge and prepare graduates to lead with integrity,
-      curiosity, and a commitment to the public good.
-    </p>
-  </div>
+  <section class="section" id="about">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="section-label">About</p>
+        <h2 class="section-title">Nearly 140 years of academic tradition</h2>
+      </div>
+      <p class="about-text reveal">
+        Founded in 1887 in Oxford, England, Aldermoor University has grown from a single
+        teaching college into a research-intensive institution spanning six faculties.
+        Our mission is to advance knowledge and prepare graduates to lead with integrity,
+        curiosity, and a commitment to the public good.
+      </p>
+    </div>
+  </section>
+
+  <!-- HOW TO APPLY -->
+  <section class="section section-bg" id="how-to-apply">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="section-label">Admissions</p>
+        <h2 class="section-title">How to apply</h2>
+      </div>
+      <div class="steps">
+        <div class="step reveal"><h3>Choose your field</h3><p>Explore our six fields of study and find the programme that fits your interests.</p></div>
+        <div class="step reveal" style="--d:.08s"><h3>Submit your application</h3><p>Complete the online application form with your details and academic background.</p></div>
+        <div class="step reveal" style="--d:.16s"><h3>Hear back from us</h3><p>Our admissions team reviews your application and contacts you with a decision.</p></div>
+      </div>
+    </div>
+  </section>
 
   <!-- CTA -->
-  <div class="cta-strip" id="admissions">
-    <h2>Ready to join Aldermoor?</h2>
-    <p>Applications for the 2026–27 academic year are now open.</p>
+  <section class="cta-strip" id="admissions">
+    <h2 class="reveal">Ready to join Aldermoor?</h2>
+    <p class="reveal">Applications for the 2026–27 academic year are now open.</p>
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSdoaaptosJzWA2gv4qFaMvo8UYZDNpw7mdfH9JDdMYB3LgDwg/viewform" target="_blank" rel="noopener" class="btn-primary">Start your application</a>
-  </div>
+  </section>
+
+  </main>
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-left">© 2026 Aldermoor University. All rights reserved.</div>
-    <div class="footer-links">
-      <a href="#">Privacy</a>
-      <a href="#">Accessibility</a>
-      <a href="#">Contact</a>
-      <a href="#">Sitemap</a>
+    <div class="wrap">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand"><span class="nav-emblem" aria-hidden="true"><i class="ti ti-building-arch"></i></span>Aldermoor University</div>
+          <p class="footer-about">Founded 1887 in Oxford, England.</p>
+        </div>
+        <nav aria-label="Explore">
+          <h2>Explore</h2>
+          <ul>
+            <li><a href="#academics">Academics</a></li>
+            <li><a href="#research">Research</a></li>
+            <li><a href="#campus-life">Campus life</a></li>
+            <li><a href="#admissions">Admissions</a></li>
+            <li><a href="#about">About</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Information">
+          <h2>Information</h2>
+          <ul>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Accessibility</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Sitemap</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-bottom">© 2026 Aldermoor University. All rights reserved.</div>
     </div>
   </footer>
+
+  <!-- VISUAL ENHANCEMENTS (menu toggle, nav shadow, scroll reveal). No auth logic here. -->
+  <script>
+  (function () {
+    var nav = document.getElementById('siteNav');
+    var btn = document.getElementById('navMenuBtn');
+    var links = document.getElementById('navLinks');
+    function setMenu(open) {
+      links.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    }
+    btn.addEventListener('click', function () { setMenu(!links.classList.contains('open')); });
+    links.addEventListener('click', function (e) { if (e.target.tagName === 'A') setMenu(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+    function onScroll() { nav.classList.toggle('scrolled', window.scrollY > 8); }
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+    var items = document.querySelectorAll('.reveal');
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+  </script>
+
+  <!-- FIELD EXPLORER (expandable programme cards). No auth logic here. -->
+  <script>
+  (function () {
+    var IMG = 'https://images.unsplash.com/photo-%s?auto=format&fit=crop&w=800&q=70';
+    var FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSdoaaptosJzWA2gv4qFaMvo8UYZDNpw7mdfH9JDdMYB3LgDwg/viewform';
+    var FIELDS = {
+      sciences: { title: 'Sciences', img: '1507413245164-6160d8298b31', alt: 'Scientist working with chemistry equipment', intro: 'Explore the natural world through experiments, fieldwork and data.',
+        items: [['Physics','Matter, energy, and the laws that govern the universe.'],['Biology','Living systems from cells to whole ecosystems.'],['Chemistry','The structure, properties and reactions of substances.'],['Environmental Sciences','Climate, ecosystems and sustainable resource use.']] },
+      engineering: { title: 'Engineering & Computing', img: '1517694712202-14dd9538aa97', alt: 'Student writing code on a laptop', intro: 'Design, build and solve problems with technology.',
+        items: [['Software Engineering','Build reliable software, apps and systems.'],['Civil Engineering','Plan and construct buildings, bridges and infrastructure.'],['Electrical Engineering','Power, electronics and communication systems.'],['Mechanical Engineering','Machines, materials and motion.']] },
+      business: { title: 'Business & Economics', img: '1454165804606-c3d57bc86b40', alt: 'Business team working at a desk with a laptop', intro: 'Understand markets, organisations and how decisions shape the economy.',
+        items: [['Finance','Investment, banking and financial decision-making.'],['Management','Lead teams and organisations effectively.'],['Marketing','Understand customers and build strong brands.'],['Global Trade','How goods, services and money move between countries.'],['Economics','Study how people and societies use resources.']] },
+      humanities: { title: 'Humanities', img: '1481627834876-b7833e8f5570', alt: 'Library shelves filled with books', intro: 'Examine ideas, cultures and the stories that shape our world.',
+        items: [['History','Understand the events and people of the past.'],['Philosophy','Think critically about knowledge, ethics and meaning.'],['Literature','Read, analyse and discuss great writing.'],['Linguistics','The science of language and communication.']] },
+      medicine: { title: 'Medicine & Health', img: '1576091160399-112ba8d25d1d', alt: 'Healthcare professional in a clinical setting', intro: 'Train for a career caring for individuals and communities.',
+        items: [['Clinical Medicine','Diagnose and treat patients with hands-on training.'],['Nursing','Compassionate, skilled care across health settings.'],['Public Health','Protect and improve the health of populations.'],['Pharmacy','Medicines, their effects and safe use.']] },
+      arts: { title: 'Arts & Design', img: '1513364776144-60967b0f800f', alt: 'Colourful paintings and art supplies', intro: 'Develop your creative voice and professional craft.',
+        items: [['Fine Arts','Painting, drawing, sculpture and mixed media.'],['Graphic Design','Visual communication for print and screen.'],['Architecture','Design spaces and buildings for people.'],['Film','Storytelling through moving images.']] }
+    };
+    var panel = document.getElementById('fieldPanel');
+    var cards = document.querySelectorAll('.program-card[data-field]');
+    var current = null;
+    function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+    function close(returnFocus) {
+      panel.hidden = true; panel.innerHTML = '';
+      cards.forEach(function (c) { c.setAttribute('aria-expanded', 'false'); });
+      var prev = current; current = null;
+      if (returnFocus && prev) prev.focus();
+    }
+    function open(card) {
+      var f = FIELDS[card.dataset.field];
+      cards.forEach(function (c) { c.setAttribute('aria-expanded', c === card ? 'true' : 'false'); });
+      panel.innerHTML =
+        '<div class="fp-img"><img src="' + IMG.replace('%s', f.img) + '" alt="' + esc(f.alt) + '" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'" /></div>' +
+        '<div class="fp-body"><div class="fp-head"><h3>' + esc(f.title) + '</h3>' +
+        '<button type="button" class="fp-close" aria-label="Close programmes"><i class="ti ti-x" aria-hidden="true"></i></button></div>' +
+        '<p class="fp-intro">' + esc(f.intro) + '</p><ul class="fp-list">' +
+        f.items.map(function (i) { return '<li><h4>' + esc(i[0]) + '</h4><p>' + esc(i[1]) + '</p></li>'; }).join('') +
+        '</ul><a class="btn-primary" href="' + FORM + '" target="_blank" rel="noopener">Apply now</a></div>';
+      panel.hidden = false; current = card;
+      panel.querySelector('.fp-close').addEventListener('click', function () { close(true); });
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      panel.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
+    }
+    cards.forEach(function (card) {
+      card.addEventListener('click', function () { if (current === card) close(false); else open(card); });
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && current) close(true); });
+  })();
+  </script>
 
   <!-- CHATBASE AI CHATBOT -->
   <script>
