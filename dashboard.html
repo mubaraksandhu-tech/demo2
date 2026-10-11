@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My application | Aldermoor University</title>
+<style>
+  :root {
+    --navy-900:#071E38; --navy-800:#0A2A4D; --navy-700:#0C447C; --blue-600:#185FA5;
+    --blue-100:#E6F1FB; --blue-50:#F2F7FC; --ink:#12233A; --muted:#4A5B72; --line:#DCE4EE;
+    --error:#A13D2A; --ok:#1E6B45; --ok-bg:#E4F4EB; --warn-bg:#FFF4D6; --warn:#7A5A00; --bad-bg:#F8ECE8;
+    --font-display:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+    --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--font-body); color:var(--ink); background:var(--blue-50); min-height:100vh; display:flex; flex-direction:column; line-height:1.6; }
+  :focus-visible { outline:3px solid #378ADD; outline-offset:3px; border-radius:4px; }
+  .hidden { display:none !important; }
+  header { background:linear-gradient(120deg,var(--navy-900),var(--navy-700)); color:#fff; }
+  .bar { max-width:1000px; margin:0 auto; padding:1rem 1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+  .brand { color:#fff; text-decoration:none; font-family:var(--font-display); font-size:1.25rem; font-weight:700; }
+  .back { color:#DCEAF8; font-size:14px; text-decoration:none; }
+  .back:hover { color:#fff; text-decoration:underline; }
+  .hero { max-width:1000px; margin:0 auto; padding:1.25rem 1.5rem 3.75rem; }
+  .hero h1 { font-family:var(--font-display); font-size:clamp(1.8rem,4vw,2.6rem); line-height:1.15; }
+  main { flex:1; width:100%; max-width:1000px; margin:-2.25rem auto 3rem; padding:0 1.5rem; display:grid; gap:20px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 10px 30px rgba(10,42,77,.12); padding:1.75rem; }
+  .card h2 { font-family:var(--font-display); font-size:1.4rem; color:var(--navy-800); margin-bottom:.4rem; }
+  .sub { color:var(--muted); font-size:15px; }
+  .top { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; border:1.5px solid var(--navy-800); border-radius:999px; background:var(--navy-800); color:#fff; padding:.7rem 1.4rem; font:600 15px/1.2 var(--font-body); cursor:pointer; text-decoration:none; transition:background .2s,color .2s; }
+  .btn:hover { background:var(--blue-600); border-color:var(--blue-600); }
+  .btn.ghost { background:transparent; color:var(--navy-800); }
+  .btn.ghost:hover { background:var(--navy-800); color:#fff; }
+  .badge { display:inline-block; padding:.3rem .9rem; border-radius:999px; font-size:14px; font-weight:700; background:var(--blue-100); color:var(--navy-700); }
+  .badge.accepted { background:var(--ok-bg); color:var(--ok); }
+  .badge.rejected { background:var(--bad-bg); color:var(--error); }
+  .badge.draft { background:var(--warn-bg); color:var(--warn); }
+  .meta { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin:1.25rem 0; }
+  .meta dt { font-size:13px; color:var(--muted); } .meta dd { font-weight:600; color:var(--navy-800); word-break:break-word; }
+  .tracker { list-style:none; display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:1.5rem 0 1rem; }
+  .tracker li { border-top:4px solid var(--line); padding-top:8px; font-size:14px; color:var(--muted); }
+  .tracker li.done { border-color:var(--blue-600); color:var(--blue-600); }
+  .tracker li.current { border-color:var(--navy-800); color:var(--navy-800); font-weight:700; }
+  .tracker li.accepted { border-color:var(--ok); color:var(--ok); font-weight:700; }
+  .tracker li.rejected { border-color:var(--error); color:var(--error); font-weight:700; }
+  .note { padding:.9rem 1rem; border-radius:10px; background:var(--blue-50); border:1px solid var(--line); color:var(--ink); font-size:15px; }
+  .group h3 { font-size:15px; color:var(--navy-800); margin:1.25rem 0 .5rem; padding-bottom:.35rem; border-bottom:1px solid var(--line); }
+  .group dl { display:grid; grid-template-columns:minmax(140px,1fr) 2fr; gap:6px 16px; font-size:15px; }
+  .group dt { color:var(--muted); } .group dd { word-break:break-word; white-space:pre-wrap; }
+  .error { background:var(--bad-bg); color:var(--error); padding:.9rem 1rem; border-radius:10px; font-size:15px; }
+  footer { background:var(--navy-900); color:#C9D8EA; text-align:center; font-size:14px; padding:1.25rem; }
+  @media (max-width:560px) { .tracker { grid-template-columns:repeat(2,1fr); } .group dl { grid-template-columns:1fr; } .card { padding:1.25rem; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="brand" href="index.html">Aldermoor University</a>
+    <a class="back" href="index.html">&larr; Back to website</a>
+  </div>
+  <div class="hero"><h1>My application</h1></div>
+</header>
+
+<main id="main">
+  <div id="loading" class="card"><p class="sub">Loading your application&hellip;</p></div>
+
+  <section id="signedOut" class="card hidden" aria-labelledby="soTitle">
+    <h2 id="soTitle">Sign in to see your application</h2>
+    <p class="sub" style="margin-bottom:1rem">Your application status is private to your account.</p>
+    <a class="btn" href="apply.html">Go to sign in</a>
+  </section>
+
+  <section id="signedIn" class="hidden" aria-live="polite">
+    <div class="card" style="margin-bottom:20px">
+      <div class="top">
+        <p class="sub">Signed in as <strong id="who"></strong></p>
+        <button type="button" class="btn ghost" id="signOutBtn">Sign out</button>
+      </div>
+    </div>
+    <div id="appArea"></div>
+  </section>
+</main>
+<footer>&copy; 2026 Aldermoor University. All rights reserved.</footer>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  // Same Firebase project as the rest of the site (copied unchanged).
+  const firebaseConfig = {
+    apiKey: "AIzaSyBjnLNN8BLm9sEJluPnlDhHwS3G9fGTFoA",
+    authDomain: "fir-def09.firebaseapp.com",
+    projectId: "fir-def09",
+    storageBucket: "fir-def09.firebasestorage.app",
+    messagingSenderId: "995080563939",
+    appId: "1:995080563939:web:dec983e691c0d065aee9d6",
+    measurementId: "G-SSE2P4WNEH"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const $ = (id) => document.getElementById(id);
+  const esc = (t) => String(t ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  const STATUS = {
+    draft:        { label: "Draft", step: 0, text: "Your application is saved as a draft. Finish it and submit it to be considered." },
+    submitted:    { label: "Submitted", step: 1, text: "We have received your application. It is waiting to be reviewed." },
+    under_review: { label: "Under review", step: 2, text: "Your application is being reviewed by the admissions team." },
+    accepted:     { label: "Accepted", step: 3, text: "Congratulations, your application has been accepted." },
+    rejected:     { label: "Rejected", step: 3, text: "Unfortunately, your application was not successful this time." }
+  };
+  const GROUPS = [
+    ["Personal details", [["fullName","Full name"],["dob","Date of birth"],["phone","Phone number"],["country","Country of residence"]]],
+    ["Programme", [["level","Level of study"],["field","Field of study"],["programme","Programme"]]],
+    ["Education", [["qualification","Highest qualification"],["institution","School or university"],["gradYear","Year of completion"],["grade","Grade or result"]]],
+    ["Statement", [["statement","Personal statement"]]]
+  ];
+  const fmt = (ts) => ts && ts.toDate ? ts.toDate().toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" }) : "\u2014";
+
+  function render(uid, d) {
+    const st = STATUS[d.status] || { label: String(d.status), step: 1, text: "" };
+    const a = d.answers || {};
+    const labels = ["Draft", "Submitted", "Under review", d.status === "accepted" ? "Accepted" : d.status === "rejected" ? "Rejected" : "Decision"];
+    const tracker = labels.map((l, i) => {
+      let c = i < st.step ? "done" : i === st.step ? "current" : "";
+      if (i === 3 && st.step === 3) c = d.status;
+      return '<li class="' + c + '"' + (c && c !== "done" ? ' aria-current="step"' : "") + ">" + esc(l) + "</li>";
+    }).join("");
+    const groups = GROUPS.map(([title, fields]) => '<div class="group"><h3>' + esc(title) + "</h3><dl>" +
+      fields.map(([k, l]) => "<dt>" + esc(l) + "</dt><dd>" + esc(a[k] || "\u2014") + "</dd>").join("") + "</dl></div>").join("");
+    const action = d.status === "draft"
+      ? '<a class="btn" href="apply.html">Continue my application</a>'
+      : '<p class="sub">Submitted applications can no longer be edited.</p>';
+    $("appArea").innerHTML =
+      '<div class="card"><div class="top"><h2>Application status</h2><span class="badge ' + esc(d.status) + '">' + esc(st.label) + "</span></div>" +
+      '<ol class="tracker" aria-label="Application progress">' + tracker + "</ol>" +
+      '<p class="note">' + esc(st.text) + "</p>" +
+      '<dl class="meta"><div><dt>Reference</dt><dd>' + esc(uid.slice(0, 8).toUpperCase()) + "</dd></div>" +
+      "<div><dt>Intake</dt><dd>2026\u201327</dd></div>" +
+      "<div><dt>Started</dt><dd>" + esc(fmt(d.createdAt)) + "</dd></div>" +
+      "<div><dt>Last updated</dt><dd>" + esc(fmt(d.updatedAt)) + "</dd></div>" +
+      "<div><dt>Submitted</dt><dd>" + esc(fmt(d.submittedAt)) + "</dd></div></dl>" + action + "</div>" +
+      '<div class="card" style="margin-top:20px"><h2>Your answers</h2>' + groups + "</div>";
+  }
+
+  async function load(user) {
+    $("appArea").innerHTML = '<div class="card"><p class="sub">Loading your application\u2026</p></div>';
+    try {
+      const snap = await getDoc(doc(db, "applications", user.uid));   // rules only allow reading your own
+      if (!snap.exists()) {
+        $("appArea").innerHTML = '<div class="card"><h2>No application yet</h2><p class="sub" style="margin-bottom:1rem">You have not started an application for the 2026\u201327 intake.</p><a class="btn" href="apply.html">Start my application</a></div>';
+        return;
+      }
+      render(user.uid, snap.data());
+    } catch (err) {
+      console.error(err);
+      $("appArea").innerHTML = '<div class="error" role="alert">We couldn\'t load your application (' + esc(err.code || "error") + "). Please refresh and try again.</div>";
+    }
+  }
+
+  $("signOutBtn").addEventListener("click", () => signOut(auth));
+  onAuthStateChanged(auth, (user) => {
+    $("loading").classList.add("hidden");
+    if (user) {
+      $("signedOut").classList.add("hidden"); $("signedIn").classList.remove("hidden");
+      $("who").textContent = user.email || user.phoneNumber || user.displayName || "your account";
+      load(user);
+    } else {
+      $("signedIn").classList.add("hidden"); $("signedOut").classList.remove("hidden"); $("appArea").innerHTML = "";
+    }
+  });
+</script>
+</body>
+</html>
