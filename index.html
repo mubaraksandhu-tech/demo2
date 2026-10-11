@@ -257,7 +257,7 @@
       </div>
       <div class="nav-actions">
         <a href="#" class="nav-login" id="navLoginBtn" onclick="openAuthModal('signin'); return false;">Log in</a>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdoaaptosJzWA2gv4qFaMvo8UYZDNpw7mdfH9JDdMYB3LgDwg/apply.html" target="_blank" rel="noopener" class="nav-cta" id="navApplyBtn">Apply now</a>
+        <a href="apply.html" class="nav-cta" id="navApplyBtn">Apply now</a>
         <div class="nav-user auth-hidden" id="navUser">
           <span class="nav-username" id="navUsername"></span>
           <button class="nav-logout" id="navLogoutBtn">Logout</button>
@@ -426,7 +426,7 @@
   <section class="cta-strip" id="admissions">
     <h2 class="reveal">Ready to join Aldermoor?</h2>
     <p class="reveal">Applications for the 2026–27 academic year are now open.</p>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdoaaptosJzWA2gv4qFaMvo8UYZDNpw7mdfH9JDdMYB3LgDwg/apply.html" target="_blank" rel="noopener" class="btn-primary">Start your application</a>
+    <a href="apply.html" class="btn-primary">Start your application</a>
   </section>
 
   </main>
@@ -497,7 +497,7 @@
   <script>
   (function () {
     var IMG = 'https://images.unsplash.com/photo-%s?auto=format&fit=crop&w=800&q=70';
-    var FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSdoaaptosJzWA2gv4qFaMvo8UYZDNpw7mdfH9JDdMYB3LgDwg/apply.html';
+    var FORM = 'apply.html';
     var FIELDS = {
       sciences: { title: 'Sciences', img: '1507413245164-6160d8298b31', alt: 'Scientist working with chemistry equipment', intro: 'Explore the natural world through experiments, fieldwork and data.',
         items: [['Physics','Matter, energy, and the laws that govern the universe.'],['Biology','Living systems from cells to whole ecosystems.'],['Chemistry','The structure, properties and reactions of substances.'],['Environmental Sciences','Climate, ecosystems and sustainable resource use.']] },
@@ -531,7 +531,7 @@
         '<button type="button" class="fp-close" aria-label="Close programmes"><i class="ti ti-x" aria-hidden="true"></i></button></div>' +
         '<p class="fp-intro">' + esc(f.intro) + '</p><ul class="fp-list">' +
         f.items.map(function (i) { return '<li><h4>' + esc(i[0]) + '</h4><p>' + esc(i[1]) + '</p></li>'; }).join('') +
-        '</ul><a class="btn-primary" href="' + FORM + '" target="_blank" rel="noopener">Apply now</a></div>';
+        '</ul><a class="btn-primary" href="' + FORM + '">Apply now</a></div>';
       panel.hidden = false; current = card;
       panel.querySelector('.fp-close').addEventListener('click', function () { close(true); });
       var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
