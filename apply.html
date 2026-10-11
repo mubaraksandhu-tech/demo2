@@ -54,6 +54,32 @@
   iframe { width:100%; height:80vh; min-height:640px; border:1px solid var(--line); border-radius:10px; background:#fff; }
   .note { margin-top:1rem; font-size:14px; color:var(--muted); }
 
+
+  select, textarea { width:100%; border:1px solid var(--line); border-radius:8px; padding:12px; font-size:15px; font-family:inherit; background:var(--blue-50); color:var(--ink); }
+  select:focus, textarea:focus { border-color:var(--blue-600); box-shadow:0 0 0 3px var(--blue-100); outline:none; }
+  [aria-invalid="true"] { border-color:var(--error); background:#FDF6F4; }
+  .field { margin-bottom:18px; }
+  .fmsg { font-size:13.5px; color:var(--muted); margin-top:5px; min-height:1px; }
+  .fmsg.err { color:var(--error); font-weight:600; }
+  .opt { font-weight:400; color:var(--muted); }
+  .check { display:flex; gap:10px; align-items:flex-start; font-weight:500; color:var(--ink); }
+  .check input { width:auto; margin-top:5px; flex-shrink:0; }
+  .progress { list-style:none; display:flex; gap:8px; margin:1.25rem 0 1.75rem; }
+  .progress li { flex:1; font-size:13px; color:var(--muted); border-top:4px solid var(--line); padding-top:8px; }
+  .progress li.done { border-color:var(--blue-600); color:var(--blue-600); }
+  .progress li.current { border-color:var(--navy-800); color:var(--navy-800); font-weight:700; }
+  .step-title { font-family:var(--font-display); font-size:1.4rem; color:var(--navy-800); margin-bottom:.35rem; }
+  .step-title:focus { outline:none; }
+  .step-note { color:var(--muted); font-size:15px; margin-bottom:1.25rem; }
+  .nav-row { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid var(--line); }
+  .review h4 { display:flex; justify-content:space-between; align-items:center; font-size:15px; color:var(--navy-800); margin:1.25rem 0 .5rem; }
+  .review dl { display:grid; grid-template-columns:minmax(120px,1fr) 2fr; gap:6px 16px; font-size:15px; }
+  .review dt { color:var(--muted); } .review dd { word-break:break-word; white-space:pre-wrap; }
+  .done-box { text-align:center; padding:1.5rem .5rem; }
+  .done-box h3 { font-family:var(--font-display); font-size:1.7rem; color:var(--navy-800); margin-bottom:.5rem; }
+  .ref { display:inline-block; margin:1rem 0; padding:.5rem 1rem; background:var(--blue-100); color:var(--navy-800); border-radius:8px; font-weight:700; letter-spacing:.06em; }
+  @media (max-width:560px) { .progress li span { display:none; } .progress li.current span { display:inline; } .review dl { grid-template-columns:1fr; } .nav-row { flex-wrap:wrap; } }
+
   footer { background:var(--navy-900); color:#C9D8EA; text-align:center; font-size:14px; padding:1.25rem; }
   @media (max-width:560px) { .card { padding:1.4rem; } .hero { padding-bottom:3.5rem; } }
 </style>
@@ -93,15 +119,24 @@
     <div class="welcome">
       <div>
         <h2 id="formTitle">Your application</h2>
-        <p>Signed in as <strong id="userEmail"></strong></p>
+        <p>Signed in as <strong id="userEmail"></strong> &middot; 2026&ndash;27 intake</p>
       </div>
-      <div class="actions">
-        <a class="btn ghost" id="newTabLink" href="#" target="_blank" rel="noopener">Open form in a new tab</a>
-        <button type="button" class="btn ghost" id="signOutBtn">Sign out</button>
-      </div>
+      <div class="actions"><button type="button" class="btn ghost" id="signOutBtn">Sign out</button></div>
     </div>
-    <iframe id="formFrame" title="Aldermoor University application form" src="about:blank">Loading&hellip;</iframe>
-    <p class="note">If the form does not display, use &ldquo;Open form in a new tab&rdquo; above.</p>
+    <div id="appStatus" class="message" role="status" aria-live="polite"></div>
+    <div id="formArea">
+      <ol class="progress" id="progress" aria-label="Application progress"></ol>
+      <form id="appForm" novalidate>
+        <div id="stepBox"></div>
+        <div class="nav-row">
+          <button type="button" class="btn ghost" id="backBtn">Back</button>
+          <button type="button" class="link" id="saveBtn">Save draft</button>
+          <button type="button" class="btn" id="nextBtn">Continue</button>
+        </div>
+      </form>
+    </div>
+    <div id="doneBox" class="done-box hidden" tabindex="-1"></div>
+    <p class="note">Having trouble? You can still use the <a id="newTabLink" href="#" target="_blank" rel="noopener">original Google Form</a>.</p>
   </section>
 </main>
 
@@ -113,6 +148,7 @@
     getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
     signOut, sendPasswordResetEmail, onAuthStateChanged
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   // Same Firebase project as index.html / auth.html (copied unchanged).
   const firebaseConfig = {
@@ -124,7 +160,9 @@
     appId: "1:995080563939:web:dec983e691c0d065aee9d6",
     measurementId: "G-SSE2P4WNEH"
   };
-  const auth = getAuth(initializeApp(firebaseConfig));
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
   // Your existing Google Form.
   const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdoaaptosJzWA2gv4qFaMvo8UYZDNpw7mdfH9JDdMYB3LgDwg/viewform";
@@ -189,6 +227,170 @@
     return map[err.code] || "Something went wrong. Please try again.";
   }
 
+
+  // ================= APPLICATION FORM (saved to Cloud Firestore) =================
+  const PROGRAMMES = {
+    "Sciences": ["Physics","Biology","Chemistry","Environmental Sciences"],
+    "Engineering & Computing": ["Software Engineering","Civil Engineering","Electrical Engineering","Mechanical Engineering"],
+    "Business & Economics": ["Finance","Management","Marketing","Global Trade","Economics"],
+    "Humanities": ["History","Philosophy","Literature","Linguistics"],
+    "Medicine & Health": ["Clinical Medicine","Nursing","Public Health","Pharmacy"],
+    "Arts & Design": ["Fine Arts","Graphic Design","Architecture","Film"]
+  };
+  let answers = {}, errors = {}, cur = 0, createdAt = null, saving = false;
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const STEPS = [
+    { title: "Personal details", fields: [
+      { id: "fullName", label: "Full name", type: "text", required: true, max: 100, ac: "name" },
+      { id: "dob", label: "Date of birth", type: "date", required: true },
+      { id: "phone", label: "Phone number", type: "tel", required: true, ac: "tel", pattern: /^[+()\d\s-]{7,20}$/, patternMsg: "Enter a valid phone number." },
+      { id: "country", label: "Country of residence", type: "text", required: true, max: 80, ac: "country-name" }] },
+    { title: "Programme", note: "Intake: 2026\u201327 academic year", fields: [
+      { id: "level", label: "Level of study", type: "select", required: true, options: () => ["Undergraduate", "Postgraduate"] },
+      { id: "field", label: "Field of study", type: "select", required: true, options: () => Object.keys(PROGRAMMES) },
+      { id: "programme", label: "Programme", type: "select", required: true, options: () => PROGRAMMES[answers.field] || [], help: "Choose a field of study first." }] },
+    { title: "Education", fields: [
+      { id: "qualification", label: "Highest qualification completed", type: "select", required: true, options: () => ["Secondary school certificate", "Bachelor's degree", "Master's degree", "Other"] },
+      { id: "institution", label: "Most recent school or university", type: "text", required: true, max: 150 },
+      { id: "gradYear", label: "Year of completion", type: "number", required: true, min: 1980, max: 2030 },
+      { id: "grade", label: "Grade or result", type: "text", required: false, max: 60 }] },
+    { title: "Statement", fields: [
+      { id: "statement", label: "Why do you want to study this programme at Aldermoor?", type: "textarea", required: true, min: 50, max: 1500, help: "50 to 1,500 characters." },
+      { id: "declaration", label: "I confirm that the information I have given is accurate.", type: "checkbox", required: true },
+      { id: "consent", label: "I agree to Aldermoor University using my information to process my application.", type: "checkbox", required: true }] }
+  ];
+  const REVIEW = STEPS.length;
+  const esc = (t) => String(t ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  function setStatus(text, type) { $("appStatus").textContent = text; $("appStatus").className = "message" + (text ? " " + type : ""); }
+
+  function check(f) {
+    const v = answers[f.id];
+    if (f.type === "checkbox") return f.required && v !== true ? "Please tick this box to continue." : "";
+    const s = (v == null ? "" : String(v)).trim();
+    if (!s) return f.required ? "This field is required." : "";
+    if (f.type === "textarea" && s.length < f.min) return "Please write at least " + f.min + " characters.";
+    if (f.type === "number") { const n = Number(s); if (!Number.isInteger(n) || n < f.min || n > f.max) return "Enter a year between " + f.min + " and " + f.max + "."; }
+    if (f.type === "date" && (s > todayStr || s < "1900-01-01")) return "Enter a valid date of birth.";
+    if (f.pattern && !f.pattern.test(s)) return f.patternMsg;
+    if (f.type === "select" && !f.options().includes(s)) return "Choose one of the options.";
+    return "";
+  }
+  function validateStep(i) {
+    let first = null;
+    STEPS[i].fields.forEach((f) => { const m = check(f); if (m) { errors[f.id] = m; first = first || f.id; } else delete errors[f.id]; });
+    return first;
+  }
+  const optsHtml = (f, v) => '<option value="">Select\u2026</option>' + f.options().map((o) => '<option' + (o === v ? " selected" : "") + ">" + esc(o) + "</option>").join("");
+
+  function fieldHtml(f) {
+    const v = answers[f.id] ?? "", id = "f_" + f.id, err = errors[f.id];
+    const msg = '<p class="fmsg' + (err ? " err" : "") + '" id="' + id + '_m">' + esc(err || f.help || "") + "</p>";
+    const a = ' id="' + id + '" data-id="' + f.id + '" aria-describedby="' + id + '_m"' + (err ? ' aria-invalid="true"' : "") + (f.required ? ' aria-required="true"' : "");
+    if (f.type === "checkbox") return '<div class="field"><label class="check"><input type="checkbox"' + a + (v === true ? " checked" : "") + "><span>" + esc(f.label) + " <span aria-hidden=\"true\">*</span></span></label>" + msg + "</div>";
+    const lab = '<label for="' + id + '">' + esc(f.label) + (f.required ? ' <span aria-hidden="true">*</span>' : ' <span class="opt">(optional)</span>') + "</label>";
+    let ctl;
+    if (f.type === "select") ctl = "<select" + a + ">" + optsHtml(f, v) + "</select>";
+    else if (f.type === "textarea") ctl = "<textarea" + a + ' rows="6" maxlength="' + f.max + '">' + esc(v) + "</textarea>";
+    else ctl = '<input type="' + f.type + '"' + a + ' value="' + esc(v) + '"' + (f.max && f.type === "text" ? ' maxlength="' + f.max + '"' : "") + (f.type === "number" ? ' min="' + f.min + '" max="' + f.max + '" inputmode="numeric"' : "") + (f.type === "date" ? ' max="' + todayStr + '"' : "") + (f.ac ? ' autocomplete="' + f.ac + '"' : "") + ">";
+    return '<div class="field">' + lab + ctl + msg + "</div>";
+  }
+  function reviewHtml() {
+    let h = '<h3 class="step-title" id="stepTitle" tabindex="-1">Review your answers</h3><p class="step-note">Check everything below. You can go back and edit any section before submitting.</p><div class="review"><dl><dt>Account email</dt><dd>' + esc(auth.currentUser.email) + "</dd></dl>";
+    STEPS.forEach((st, i) => {
+      h += '<h4><span>' + esc(st.title) + '</span><button type="button" class="link" data-goto="' + i + '">Edit</button></h4><dl>';
+      st.fields.forEach((f) => { const v = answers[f.id]; h += "<dt>" + esc(f.type === "checkbox" ? "Confirmed" : f.label) + "</dt><dd>" + esc(f.type === "checkbox" ? (v === true ? "Yes" : "No") : (v || "\u2014")) + "</dd>"; });
+      h += "</dl>";
+    });
+    return h + "</div>";
+  }
+  function render() {
+    $("progress").innerHTML = STEPS.concat([{ title: "Review" }]).map((st, i) => '<li class="' + (i < cur ? "done" : i === cur ? "current" : "") + '"' + (i === cur ? ' aria-current="step"' : "") + "><span>" + (i + 1) + ". " + esc(st.title) + "</span></li>").join("");
+    $("stepBox").innerHTML = cur === REVIEW ? reviewHtml()
+      : '<h3 class="step-title" id="stepTitle" tabindex="-1">' + esc(STEPS[cur].title) + "</h3>" + (STEPS[cur].note ? '<p class="step-note">' + esc(STEPS[cur].note) + "</p>" : '<p class="step-note">Fields marked * are required.</p>') + STEPS[cur].fields.map(fieldHtml).join("");
+    $("backBtn").disabled = cur === 0;
+    $("nextBtn").textContent = cur === REVIEW ? "Submit application" : "Continue";
+    $("nextBtn").disabled = $("saveBtn").disabled = saving;
+  }
+  function go(i, focusId) {
+    cur = i; render();
+    const el = focusId ? $("f_" + focusId) : $("stepTitle");
+    if (el) el.focus();
+    if (!focusId) $("signedIn").scrollIntoView({ block: "start" });
+  }
+
+  $("stepBox").addEventListener("input", onChange);
+  $("stepBox").addEventListener("change", onChange);
+  function onChange(e) {
+    const id = e.target.dataset.id; if (!id) return;
+    answers[id] = e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    delete errors[id]; e.target.removeAttribute("aria-invalid");
+    const m = $("f_" + id + "_m"); m.className = "fmsg"; m.textContent = id === "programme" ? "Choose a field of study first." : "";
+    if (id === "field") { answers.programme = ""; const pf = STEPS[1].fields[2]; $("f_programme").innerHTML = optsHtml(pf, ""); $("f_programme_m").textContent = answers.field ? "" : pf.help; }
+    if (id === "programme" && answers.field) m.textContent = "";
+  }
+  $("stepBox").addEventListener("click", (e) => { const g = e.target.dataset.goto; if (g !== undefined) go(Number(g)); });
+  $("backBtn").addEventListener("click", () => { setStatus("", ""); go(cur - 1); });
+  $("nextBtn").addEventListener("click", () => {
+    setStatus("", "");
+    if (cur === REVIEW) return submitApplication();
+    const bad = validateStep(cur);
+    if (bad) { render(); $("f_" + bad).focus(); setStatus("Please fix the highlighted fields.", "error"); return; }
+    go(cur + 1);
+  });
+  $("saveBtn").addEventListener("click", async () => {
+    if (!await persist("draft")) return;
+    setStatus("Draft saved. You can come back and finish later.", "success");
+  });
+  $("appForm").addEventListener("submit", (e) => e.preventDefault());
+
+  function saveError(e) {
+    const c = e && e.code || "error";
+    if (c === "unavailable" || c === "deadline-exceeded") return "We couldn't reach the server. Check your connection and try again. Nothing was saved. (" + c + ")";
+    return "We couldn't save your application, so it has NOT been submitted. Please try again, or use the original Google Form below. (" + c + ")";
+  }
+  async function persist(status) {
+    const user = auth.currentUser; if (!user || saving) return false;
+    saving = true; render(); setStatus("Saving\u2026", "success");
+    try {
+      const ref = doc(db, "applications", user.uid);
+      const data = { applicantUid: user.uid, email: user.email, status, answers: { ...answers }, createdAt: createdAt || serverTimestamp(), updatedAt: serverTimestamp() };
+      if (status === "submitted") data.submittedAt = serverTimestamp();
+      await setDoc(ref, data);                          // resolves only when the server accepts the write
+      if (!createdAt) createdAt = (await getDoc(ref)).data().createdAt;
+      setStatus("", ""); return true;
+    } catch (err) { console.error(err); setStatus(saveError(err), "error"); return false; }
+    finally { saving = false; render(); }
+  }
+  async function submitApplication() {
+    for (let i = 0; i < STEPS.length; i++) {
+      const bad = validateStep(i);
+      if (bad) { go(i, bad); setStatus("Some answers need attention before you can submit.", "error"); return; }
+    }
+    if (await persist("submitted")) showDone();
+  }
+  function showDone(d) {
+    const a = d ? d.answers : answers, uid = auth.currentUser.uid;
+    $("formArea").classList.add("hidden"); $("doneBox").classList.remove("hidden");
+    $("doneBox").innerHTML = "<h3>Application submitted</h3><p>" + (d ? "You have already submitted your application" : "Thank you. Your application has been saved") + " for <strong>" + esc(a.programme) + "</strong> (" + esc(a.field) + "), 2026\u201327 intake.</p><div class=\"ref\">Reference: " + esc(uid.slice(0, 8).toUpperCase()) + "</div><p class=\"sub\">Please keep this reference. Your application can no longer be edited.</p>";
+    setStatus("", ""); $("doneBox").focus();
+  }
+  function resetApp() {
+    answers = {}; errors = {}; cur = 0; createdAt = null; saving = false;
+    $("formArea").classList.remove("hidden"); $("doneBox").classList.add("hidden"); $("doneBox").innerHTML = ""; setStatus("", "");
+  }
+  async function loadApplication(user) {
+    resetApp();
+    try {
+      const snap = await getDoc(doc(db, "applications", user.uid));
+      if (snap.exists()) {
+        const d = snap.data(); createdAt = d.createdAt; answers = { ...(d.answers || {}) };
+        if (d.status === "submitted") return showDone(d);
+        setStatus("Your saved draft has been restored.", "success");
+      }
+    } catch (err) { console.error(err); setStatus("We couldn't load any saved application (" + (err.code || "error") + "). You can still fill in the form.", "error"); }
+    render();
+  }
+
   // Show the form ONLY while a user is signed in.
   onAuthStateChanged(auth, (user) => {
     $("loading").classList.add("hidden");
@@ -196,13 +398,12 @@
       $("signedOut").classList.add("hidden");
       $("signedIn").classList.remove("hidden");
       $("userEmail").textContent = user.email;
-      $("formFrame").src = buildUrl(user.email, true);
       $("newTabLink").href = buildUrl(user.email, false);
+      loadApplication(user);
     } else {
       $("signedIn").classList.add("hidden");
       $("signedOut").classList.remove("hidden");
-      $("formFrame").src = "about:blank";
-      $("authForm").reset(); clearMessage();
+      $("authForm").reset(); clearMessage(); resetApp();
     }
   });
   setMode("signin");
