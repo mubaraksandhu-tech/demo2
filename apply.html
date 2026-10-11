@@ -420,7 +420,7 @@
   function showDone(d) {
     const a = d ? d.answers : answers, uid = auth.currentUser.uid;
     $("formArea").classList.add("hidden"); $("doneBox").classList.remove("hidden");
-    $("doneBox").innerHTML = "<h3>Application submitted</h3><p>" + (d ? "You have already submitted your application" : "Thank you. Your application has been saved") + " for <strong>" + esc(a.programme) + "</strong> (" + esc(a.field) + "), 2026\u201327 intake.</p><div class=\"ref\">Reference: " + esc(uid.slice(0, 8).toUpperCase()) + "</div><p class=\"sub\">Please keep this reference. Your application can no longer be edited.</p>";
+    $("doneBox").innerHTML = "<h3>Application submitted</h3><p>" + (d ? "You have already submitted your application" : "Thank you. Your application has been saved") + " for <strong>" + esc(a.programme) + "</strong> (" + esc(a.field) + "), 2026\u201327 intake.</p><div class=\"ref\">Reference: " + esc(uid.slice(0, 8).toUpperCase()) + "</div><p class=\"sub\">Please keep this reference. Your application can no longer be edited.</p><a class=\"btn\" href=\"dashboard.html\">View my application status</a>";
     setStatus("", ""); $("doneBox").focus();
   }
   function resetApp() {
