@@ -78,6 +78,10 @@
         <button type="button" class="btn ghost" id="signOutBtn">Sign out</button>
       </div>
     </div>
+    <div id="staffBanner" class="card hidden" style="margin-bottom:20px;border-left:4px solid var(--navy-800)">
+      <div class="top"><div><h2>You have admissions staff access</h2><p class="sub">This page shows your own application. To review applicants, open the staff dashboard.</p></div>
+      <a class="btn" href="admin.html">Open staff dashboard</a></div>
+    </div>
     <div id="appArea"></div>
   </section>
 </main>
@@ -160,6 +164,11 @@
     }
   }
 
+  async function checkStaff(user) {          // staff = has a document at /staff/{their account ID}
+    try { $("staffBanner").classList.toggle("hidden", !(await getDoc(doc(db, "staff", user.uid))).exists()); }
+    catch (err) { $("staffBanner").classList.add("hidden"); }
+  }
+
   $("signOutBtn").addEventListener("click", () => signOut(auth));
   onAuthStateChanged(auth, (user) => {
     $("loading").classList.add("hidden");
@@ -167,8 +176,9 @@
       $("signedOut").classList.add("hidden"); $("signedIn").classList.remove("hidden");
       $("who").textContent = user.email || user.phoneNumber || user.displayName || "your account";
       load(user);
+      checkStaff(user);
     } else {
-      $("signedIn").classList.add("hidden"); $("signedOut").classList.remove("hidden"); $("appArea").innerHTML = "";
+      $("signedIn").classList.add("hidden"); $("signedOut").classList.remove("hidden"); $("appArea").innerHTML = ""; $("staffBanner").classList.add("hidden");
     }
   });
 </script>
